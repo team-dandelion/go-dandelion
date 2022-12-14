@@ -1,4 +1,4 @@
-package rpcxCluster
+package rpcx
 
 import (
 	etcd_client "github.com/rpcxio/rpcx-etcd/client"

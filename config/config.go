@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 )
 
 var (
@@ -35,11 +36,13 @@ const (
 	Production = "production" // 生产环境
 )
 
-var config Config
+var Conf Config
 
 type Config struct {
-	DB *DB `json:"db" yaml:"db"`
+	WDB *WDB `json:"wdb" yaml:"wdb"`
+	RDB *RDB `json:"rdb" yaml:"rdb"`
 	Redis *Redis `json:"redis" yaml:"redis"`
+	Logger *Logger `json:"logger" yaml:"logger"`
 }
 
 func InitConfig(args ...string) {
@@ -83,7 +86,7 @@ func initConfig() {
 	for _, fi := range rd {
 		if !fi.IsDir() {
 			// 文件后缀
-			postfix := path.Ext(fi.Name())
+			postfix := strings.ReplaceAll(path.Ext(fi.Name()), ".", "")
 			if postfix != JSON && postfix != YAML && postfix != TOML && postfix != INI {
 				continue
 			}
@@ -95,7 +98,7 @@ func initConfig() {
 	}
 
 	// 加载配置
-	if configFilePostfix != "yaml" {
+	if configFilePostfix != YAML {
 		panic(errors.New("未检测到支持的配置文件类型。支持json、yaml、toml、ini等后缀。"))
 	}
 
@@ -108,7 +111,7 @@ func initConfig() {
 	if err := vip.ReadInConfig(); err != nil {
 		panic(err)
 	}
-	err = vip.Unmarshal(&config)
+	err = vip.Unmarshal(&Conf)
 	if err != nil {
 
 		panic(err)

@@ -250,7 +250,13 @@ func (l *loggers) writeMsg(customFuncCallDepth int, level int, msg string, v ...
 			msg = msg + "	[" + funcPath + " " + filename + ":" + strconv.FormatInt(int64(line), 10) + "]"
 		}
 	}
-	msg = levelPrefix[level] + msg + fmt.Sprintf("[requestId: %v]", GetRequestId())
+
+	msg = levelPrefix[level] + msg
+
+	if GetRequestId() != nil {
+		msg = fmt.Sprintf("[requestId: %v] \t", GetRequestId()) + msg
+	}
+
 	if l.asynchronous {
 		lm := new(logMsg)
 		lm.level = level

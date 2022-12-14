@@ -33,7 +33,6 @@ func (c *consoleWrite) writeMsg(when time.Time, msg string, level int) error {
 	defer c.Unlock()
 	b, _ := formatTimeHeader(when)
 
-	var infoColor, ErrorColor, WarnColor, DebugColor string
 	//Level 0 紧急的 1警报 2重要的 3错误 4警告 5提示 6信息 7调试
 	//fmt.Println(c.colorful)
 	//windows字体有问题 采用git bash 启动可实现
@@ -42,17 +41,13 @@ func (c *consoleWrite) writeMsg(when time.Time, msg string, level int) error {
 	} else {
 		switch level {
 		case 6:
-			infoColor = fmt.Sprintf("%c[%d;%d;%dm%s", 0x1B, 1, 40, 37, "")
-			fmt.Printf("%v %v %v %c[0m \n", string(b), infoColor, msg, 0x1B)
+			fmt.Printf("%v %v \n", string(b), Green(msg))
 		case 3:
-			ErrorColor = fmt.Sprintf("%c[%d;%d;%dm%s", 0x1B, 1, 40, 31, "")
-			fmt.Printf("%v %v %v %c[0m \n", string(b), ErrorColor, msg, 0x1B)
+			fmt.Printf("%v %v \n", string(b), Red(msg))
 		case 4:
-			WarnColor = fmt.Sprintf("%c[%d;%d;%dm%s", 0x1B, 1, 40, 33, "")
-			fmt.Printf("%v %v %v %c[0m \n", string(b), WarnColor, msg, 0x1B)
+			fmt.Printf("%v %v \n", string(b), Yellow(msg))
 		case 7:
-			DebugColor = fmt.Sprintf("%c[%d;%d;%dm%s", 0x1B, 1, 40, 34, "")
-			fmt.Printf("%v %v %v %c[0m \n", string(b), DebugColor, msg, 0x1B)
+			fmt.Printf("%v %v \n", string(b), Blue(msg))
 		}
 	}
 	return nil

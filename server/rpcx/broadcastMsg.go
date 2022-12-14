@@ -1,4 +1,4 @@
-package rpcxCluster
+package rpcx
 
 type BRMsgReq struct {
 	Service string //广播的服务

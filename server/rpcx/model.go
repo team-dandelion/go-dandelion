@@ -1,4 +1,4 @@
-package rpcxCluster
+package rpcx
 
 const (
 	RPC_One2One  = iota //单点对单点

@@ -1,4 +1,4 @@
-package rpcxCluster
+package rpcx
 
 import (
 	"context"

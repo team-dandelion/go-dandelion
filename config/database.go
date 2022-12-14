@@ -4,7 +4,7 @@ import (
 	xtime "github.com/gly-hub/go-dandelion/tools/time"
 )
 
-type DB struct {
+type WDB struct {
 	Type        string `json:"type" yaml:"type"`
 	User        string `json:"user" yaml:"user"`
 	Password    string `json:"password" yaml:"password"`
@@ -13,6 +13,14 @@ type DB struct {
 	Name        string `json:"name" yaml:"name"`
 }
 
+type RDB struct {
+	Type        string `json:"type" yaml:"type"`
+	User        string `json:"user" yaml:"user"`
+	Password    string `json:"password" yaml:"password"`
+	Host        string `json:"host" yaml:"host"`
+	Port        string `json:"port" yaml:"port"`
+	Name        string `json:"name" yaml:"name"`
+}
 
 type Redis struct {
 	RedisType    string `json:"redis_type" yaml:"redisType"`//cluster,alone,sentinel
