@@ -25,6 +25,10 @@ func NewRPCXClient(Model int) *RPCXClient {
 		clientRpc = client.NewOneClient(client.Failover, client.RoundRobin, d, client.DefaultOption)
 	}
 
+	plugins := client.NewPluginContainer()
+	plugins.Add(&ClientLoggerPlugin{})
+	clientRpc.SetPlugins(plugins)
+
 	return &RPCXClient{
 		rpcClient: clientRpc,
 		etcdDis:   d,

@@ -43,6 +43,8 @@ type Config struct {
 	RDB *RDB `json:"rdb" yaml:"rdb"`
 	Redis *Redis `json:"redis" yaml:"redis"`
 	Logger *Logger `json:"logger" yaml:"logger"`
+	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
+	RpcServer *RpcServer `json:"rpc_server" yaml:"rpcServer"`
 }
 
 func InitConfig(args ...string) {

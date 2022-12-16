@@ -52,6 +52,7 @@ func NewRpcxServer(serviceType string, addr string, rcvHandle interface{}) *RPCx
 	s.RegisterName(serviceType, rcvHandle, "")
 	nodeId := NodeId(addr)
 	s.RegisterName(makeLocalName(serviceType, nodeId), rcvHandle, "")
+	s.Plugins.Add(&ServerLoggerPlugin{})
 
 	rpcS := &RPCxServer{s: s, addr: addr, serviceType: serviceType, nodeId: nodeId}
 	s.RegisterFunctionName(fmt.Sprintf("SER-%s", serviceType), "broadcast", rpcS.BroadMsg, "")
@@ -59,6 +60,7 @@ func NewRpcxServer(serviceType string, addr string, rcvHandle interface{}) *RPCx
 
 	return rpcS
 }
+
 func (r *RPCxServer) SetAuthCall(authCall AuthCall) {
 	if authCall != nil {
 		r.authCall = authCall
@@ -88,7 +90,6 @@ func (r *RPCxServer) RegisterName(serviceName string, rcvr interface{}, metadata
 	return r.s.RegisterName(serviceName, rcvr, metadata)
 }
 func (r *RPCxServer) auth(ctx context.Context, req *protocol.Message, token string) error {
-	fmt.Println("token=====", token)
 	if r.authCall != nil {
 		return r.authCall(ctx, token)
 	}
