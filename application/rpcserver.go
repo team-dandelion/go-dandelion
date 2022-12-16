@@ -14,24 +14,24 @@ import (
 
 var rpc *rpcServer
 
-type rpcServer struct{
+type rpcServer struct {
 	ServerName string
-	BasePath string
-	Etcd []string
-	Addr string
-	Port int
-	server *rpcx.RPCxServer
-	client *rpcx.RPCXClient
+	BasePath   string
+	Etcd       []string
+	Addr       string
+	Port       int
+	server     *rpcx.RPCxServer
+	client     *rpcx.RPCXClient
 }
 
-func initRpcServer(){
+func initRpcServer() {
 	if config.Conf.RpcServer == nil && config.Conf.RpcServer.Etcd != nil {
 		return
 	}
 	rpc = &rpcServer{
 		ServerName: config.Conf.RpcServer.ServerName,
-		BasePath: config.Conf.RpcServer.BasePath,
-		Etcd: config.Conf.RpcServer.Etcd,
+		BasePath:   config.Conf.RpcServer.BasePath,
+		Etcd:       config.Conf.RpcServer.Etcd,
 		Addr:       config.Conf.RpcServer.Addr,
 		Port:       config.Conf.RpcServer.Port,
 	}
@@ -41,8 +41,8 @@ func initRpcServer(){
 	}
 }
 
-func RpcCall(serverName, funcName string, args interface{}, reply interface{}, ctx ...context.Context)error{
-	if rpc.client == nil{
+func RpcCall(serverName, funcName string, args interface{}, reply interface{}, ctx ...context.Context) error {
+	if rpc.client == nil {
 		panic("请配置rpcx参数")
 	}
 	var c context.Context
@@ -54,15 +54,15 @@ func RpcCall(serverName, funcName string, args interface{}, reply interface{}, c
 
 	content, _ := jsoniter.MarshalToString(args)
 	requestHeader := map[string]string{
-		"request_id": stringx.Strval(logger.GetRequestId()),
+		"request_id":  stringx.Strval(logger.GetRequestId()),
 		"client_name": rpc.ServerName,
-		"content": content,
+		"content":     content,
 	}
 	c = context.WithValue(c, share.ReqMetaDataKey, requestHeader)
 	return rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
 }
 
-func RpcServer(handler interface{}, auth ...rpcx.AuthCall){
+func RpcServer(handler interface{}, auth ...rpcx.AuthCall) {
 	if rpc == nil {
 		panic("请配置rpcx参数")
 	}
@@ -79,4 +79,3 @@ func RpcServer(handler interface{}, auth ...rpcx.AuthCall){
 	}
 	rpc.server.Start()
 }
-

@@ -8,7 +8,7 @@ import (
 
 type HttpServer struct {
 	router *routing.Router
-	port int32
+	port   int32
 }
 
 func New(port int32) *HttpServer {
@@ -28,7 +28,7 @@ func (hs *HttpServer) Port() int32 {
 	return hs.port
 }
 
-func (hs *HttpServer) RegisterRoute(prefix string, routes []Route, middlewares ...routing.Handler){
+func (hs *HttpServer) RegisterRoute(prefix string, routes []Route, middlewares ...routing.Handler) {
 	router := hs.router.Group(prefix)
 	router.Use(middlewares...)
 	for _, route := range routes {
@@ -45,6 +45,6 @@ func (hs *HttpServer) RegisterRoute(prefix string, routes []Route, middlewares .
 	}
 }
 
-func (hs *HttpServer) Server(){
+func (hs *HttpServer) Server() {
 	panic(fasthttp.ListenAndServe(fmt.Sprintf(":%d", hs.port), hs.router.HandleRequest))
 }

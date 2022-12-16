@@ -4,4 +4,3 @@ const (
 	// Debug debug switch
 	Debug = false
 )
-

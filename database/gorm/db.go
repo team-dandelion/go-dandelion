@@ -11,22 +11,22 @@ import (
 type DBType string
 
 const (
-	Mysql DBType = "mysql"
+	Mysql    DBType = "mysql"
 	Postgres DBType = "postgres"
 )
 
 type Config struct {
-	Type        DBType `json:"type"`
-	User        string `json:"user"`
-	Password    string `json:"password"`
-	Host        string `json:"host"`
-	Port        string `json:"port"`
-	Name        string `json:"name"`
+	Type     DBType `json:"type"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	Name     string `json:"name"`
 }
 
 func NewConnection(config *Config) *gorm.DB {
 	var dbUri string
-	switch config.Type{
+	switch config.Type {
 	case Mysql:
 		dbUri = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true",
 			config.User,

@@ -7,7 +7,7 @@ import (
 
 var httpServer *http.HttpServer
 
-func initHttpServer(){
+func initHttpServer() {
 	if config.Conf.HttpServer == nil {
 		return
 	}
@@ -20,4 +20,3 @@ func HttpServer() *http.HttpServer {
 	}
 	return httpServer
 }
-

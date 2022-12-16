@@ -11,9 +11,9 @@ type HttpController struct {
 }
 
 type Response struct {
-	Code int32 `json:"code"`
-	Msg string `json:"msg"`
-	Data interface{} `json:"data"`
+	Code      int32       `json:"code"`
+	Msg       string      `json:"msg"`
+	Data      interface{} `json:"data"`
 	RequestId interface{} `json:"request_id"`
 }
 
@@ -39,7 +39,7 @@ func (hc *HttpController) Success(ctx *routing.Context, data interface{}, msg st
 	return nil
 }
 
-func (hc *HttpController) Fail(ctx *routing.Context, err error, msg ...string)error{
+func (hc *HttpController) Fail(ctx *routing.Context, err error, msg ...string) error {
 	resp := &Response{
 		RequestId: logger.GetRequestId(),
 	}

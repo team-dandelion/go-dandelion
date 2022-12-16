@@ -45,7 +45,7 @@ func (d *DB) GetWDB() *gorm.DB {
 }
 
 // GetRDB 获取读库
-func (d *DB) GetRDB() *gorm.DB{
+func (d *DB) GetRDB() *gorm.DB {
 	if rdb == nil {
 		return wdb
 	}

@@ -8,7 +8,7 @@ import (
 
 var redis *smart_redis.SmartRedis
 
-func initRedis(){
+func initRedis() {
 	if config.Conf.Redis == nil {
 		return
 	}
@@ -31,7 +31,6 @@ func initRedis(){
 }
 
 type Redis struct {
-
 }
 
 func (r *Redis) GetRedis() *smart_redis.SmartRedis {

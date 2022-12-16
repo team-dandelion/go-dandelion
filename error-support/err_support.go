@@ -10,34 +10,34 @@ var errCodeMap map[int]*Error
 type Error struct {
 	Name string
 	Code int
-	Msg string
+	Msg  string
 }
 
 func (e *Error) Error() string {
 	return e.Msg
 }
 
-func Init(path string){
+func Init(path string) {
 	errCodeMap = make(map[int]*Error)
 	showFileList(path)
 	for _, route := range routes {
 		bt, _ := ioutil.ReadFile(route)
 		src := string(bt)
 		result := scanFuncDeclByComment(``, src, "@ErrMsg[(].*?[)]")
-		for k, v := range result.Errors(){
+		for k, v := range result.Errors() {
 			errCodeMap[k] = v
 		}
 	}
 }
 
-func Format(err error, out interface{}){
+func Format(err error, out interface{}) {
 	var code int32
 	var msg string
 	switch err.(type) {
 	case *Error:
 		code = int32(err.(*Error).Code)
 		msg = err.(*Error).Msg
-		if _, ok := errCodeMap[err.(*Error).Code]; ok{
+		if _, ok := errCodeMap[err.(*Error).Code]; ok {
 			msg = errCodeMap[err.(*Error).Code].Msg
 		}
 	default:

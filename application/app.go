@@ -1,6 +1,6 @@
 package application
 
-func Init(){
+func Init() {
 	// 初始化数据库
 	initDb()
 

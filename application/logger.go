@@ -5,7 +5,7 @@ import (
 	"github.com/gly-hub/go-dandelion/logger"
 )
 
-func initLogger(){
+func initLogger() {
 	//初始化日志
 	if config.Conf.Logger.ConsoleShow ||
 		config.Conf.Logger.FileWrite ||

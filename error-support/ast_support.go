@@ -13,7 +13,7 @@ const comment_prefix = string("//")
 
 type ErrorCode struct {
 	Package string
-	errors map[int]*Error
+	errors  map[int]*Error
 }
 
 func (ec *ErrorCode) Errors() map[int]*Error {
@@ -50,7 +50,7 @@ func scanFuncDeclByComment(fileName, src, targetComment string) *ErrorCode {
 		switch decl := d.(type) {
 		case *ast.GenDecl:
 			if len(decl.Specs) > 0 {
-				for _, spec := range decl.Specs{
+				for _, spec := range decl.Specs {
 					switch value := spec.(type) {
 					case *ast.ValueSpec:
 						code, auto, err, bad := analysisComment(value, targetComment, lastCode, isAuto)
@@ -78,13 +78,13 @@ func analysisComment(valueSpec *ast.ValueSpec, comment string, lastCode int, isA
 		return
 	}
 
-	if !isContainComment(valueSpec.Doc.List, comment){
+	if !isContainComment(valueSpec.Doc.List, comment) {
 		bad = true
 		return
 	}
 
 	err = &Error{}
-	for _, name := range valueSpec.Names{
+	for _, name := range valueSpec.Names {
 		err.Name = name.Name
 	}
 
@@ -99,33 +99,33 @@ func analysisComment(valueSpec *ast.ValueSpec, comment string, lastCode int, isA
 		err.Code = lastCode
 	}
 
-	for _, value := range valueSpec.Values{
+	for _, value := range valueSpec.Values {
 		switch value.(type) {
 		case *ast.BasicLit:
 			data, vErr := strconv.Atoi(value.(*ast.BasicLit).Value)
-			if vErr != nil{
+			if vErr != nil {
 				panic(data)
 			}
 			err.Code = data
 			auto = false
 		case *ast.BinaryExpr:
-			if value.(*ast.BinaryExpr).X.(*ast.Ident).Name== "iota" {
+			if value.(*ast.BinaryExpr).X.(*ast.Ident).Name == "iota" {
 				auto = true
 			}
 
-			data, vErr := strconv.Atoi(value.(*ast.BinaryExpr).Y.(*ast.BasicLit ).Value)
-			if vErr != nil{
+			data, vErr := strconv.Atoi(value.(*ast.BinaryExpr).Y.(*ast.BasicLit).Value)
+			if vErr != nil {
 				panic(data)
 			}
 			if value.(*ast.BinaryExpr).Op.String() == "-" {
-				err.Code = - data
+				err.Code = -data
 			} else {
 				err.Code = data
 			}
 		}
 	}
 
-	for _, doc := range valueSpec.Doc.List{
+	for _, doc := range valueSpec.Doc.List {
 		err.Msg = processText(doc.Text, comment)
 	}
 
@@ -149,5 +149,5 @@ func processText(text, targetComment string) string {
 		return text
 	}
 
-	return matchArr[0][8:len(matchArr[0]) - 1]
+	return matchArr[0][8 : len(matchArr[0])-1]
 }

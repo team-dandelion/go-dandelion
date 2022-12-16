@@ -39,12 +39,12 @@ const (
 var Conf Config
 
 type Config struct {
-	WDB *WDB `json:"wdb" yaml:"wdb"`
-	RDB *RDB `json:"rdb" yaml:"rdb"`
-	Redis *Redis `json:"redis" yaml:"redis"`
-	Logger *Logger `json:"logger" yaml:"logger"`
+	WDB        *WDB        `json:"wdb" yaml:"wdb"`
+	RDB        *RDB        `json:"rdb" yaml:"rdb"`
+	Redis      *Redis      `json:"redis" yaml:"redis"`
+	Logger     *Logger     `json:"logger" yaml:"logger"`
 	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
-	RpcServer *RpcServer `json:"rpc_server" yaml:"rpcServer"`
+	RpcServer  *RpcServer  `json:"rpc_server" yaml:"rpcServer"`
 }
 
 func InitConfig(args ...string) {

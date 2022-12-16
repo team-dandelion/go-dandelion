@@ -1,7 +1,7 @@
 package logger
 
 import (
-"fmt"
+	"fmt"
 )
 
 // 前景 背景 颜色

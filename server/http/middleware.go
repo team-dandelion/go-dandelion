@@ -29,7 +29,6 @@ func middlewareRequestLink(c *routing.Context) error {
 	return c.Next()
 }
 
-
 func middlewareCustomError(c *routing.Context) error {
 	defer func() {
 		if err := recover(); err != nil {
