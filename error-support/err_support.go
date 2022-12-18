@@ -41,7 +41,7 @@ func Format(err error, out interface{}) {
 			msg = errCodeMap[err.(*Error).Code].Msg
 		}
 	default:
-		code = 40000
+		code = 4000
 		msg = err.Error()
 	}
 

@@ -13,7 +13,7 @@ type HttpServer struct {
 
 func New(port int32) *HttpServer {
 	router := routing.New()
-	router.Use(middlewareRequestLink, middlewareCustomError)
+	router.Use(middlewareSentinel(), middlewareRequestLink(), middlewareCustomError())
 	return &HttpServer{
 		router: router,
 		port:   port,
@@ -46,5 +46,5 @@ func (hs *HttpServer) RegisterRoute(prefix string, routes []Route, middlewares .
 }
 
 func (hs *HttpServer) Server() {
-	panic(fasthttp.ListenAndServe(fmt.Sprintf(":%d", hs.port), hs.router.HandleRequest))
+	fasthttp.ListenAndServe(fmt.Sprintf(":%d", hs.port), hs.router.HandleRequest)
 }

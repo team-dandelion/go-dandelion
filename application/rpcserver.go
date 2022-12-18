@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	"github.com/gly-hub/go-dandelion/config"
+	error_support "github.com/gly-hub/go-dandelion/error-support"
 	"github.com/gly-hub/go-dandelion/logger"
+	"github.com/gly-hub/go-dandelion/server/http"
 	"github.com/gly-hub/go-dandelion/server/rpcx"
 	"github.com/gly-hub/go-dandelion/tools/ip"
 	"github.com/gly-hub/go-dandelion/tools/stringx"
 	jsoniter "github.com/json-iterator/go"
+	routing "github.com/qiangxue/fasthttp-routing"
 	"github.com/smallnest/rpcx/share"
+	"reflect"
 )
 
 var rpc *rpcServer
@@ -41,7 +45,8 @@ func initRpcServer() {
 	}
 }
 
-func RpcCall(serverName, funcName string, args interface{}, reply interface{}, ctx ...context.Context) error {
+// RpcCall rpc请求
+func RpcCall(serverName, funcName string, args interface{}, reply interface{}, ctx ...context.Context)error{
 	if rpc.client == nil {
 		panic("请配置rpcx参数")
 	}
@@ -59,7 +64,53 @@ func RpcCall(serverName, funcName string, args interface{}, reply interface{}, c
 		"content":     content,
 	}
 	c = context.WithValue(c, share.ReqMetaDataKey, requestHeader)
-	return rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
+	err := rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
+	if err != nil {
+		return &error_support.Error{Code: 5001, Msg:  "服务器异常"}
+	}
+
+	rv := reflect.ValueOf(reply)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
+	if rv.FieldByName("Code").Int() != int64(0) {
+		return &error_support.Error{Code: int(rv.FieldByName("Code").Int()), Msg:  rv.FieldByName("Msg").String()}
+	}
+	return nil
+}
+
+// SRpcCall rpc请求拓展
+func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{}, reply interface{})error{
+	if rpc.client == nil{
+		panic("请配置rpcx参数")
+	}
+	var hc http.HttpController
+	if err := hc.ReadJson(ctx, args); err != nil{
+		return hc.Fail(ctx, &error_support.Error{Code: 5000, Msg:  "数据解析失败"})
+	}
+
+	content, _ := jsoniter.MarshalToString(args)
+	requestHeader := map[string]string{
+		"request_id":  stringx.Strval(logger.GetRequestId()),
+		"client_name": rpc.ServerName,
+		"content":     content,
+	}
+	c := context.Background()
+	c = context.WithValue(c, share.ReqMetaDataKey, requestHeader)
+	err := rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
+	if err != nil {
+		return hc.Fail(ctx, &error_support.Error{Code: 5001, Msg:  "服务器异常"})
+	}
+
+	rv := reflect.ValueOf(reply)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
+	if rv.FieldByName("Code").Int() != int64(0) {
+		return hc.Fail(ctx, &error_support.Error{Code: int(rv.FieldByName("Code").Int()), Msg:  rv.FieldByName("Msg").String()})
+	}
+
+	return hc.Success(ctx, reply, "")
 }
 
 func RpcServer(handler interface{}, auth ...rpcx.AuthCall) {
@@ -79,3 +130,4 @@ func RpcServer(handler interface{}, auth ...rpcx.AuthCall) {
 	}
 	rpc.server.Start()
 }
+

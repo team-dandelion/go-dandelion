@@ -41,7 +41,7 @@ type DB struct {
 
 // GetWDB 获取写库
 func (d *DB) GetWDB() *gorm.DB {
-	return wdb
+	return wdb.Debug()
 }
 
 // GetRDB 获取读库
@@ -49,5 +49,5 @@ func (d *DB) GetRDB() *gorm.DB {
 	if rdb == nil {
 		return wdb
 	}
-	return rdb
+	return rdb.Debug()
 }
