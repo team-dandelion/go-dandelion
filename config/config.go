@@ -47,12 +47,10 @@ type Config struct {
 	RpcServer  *RpcServer  `json:"rpc_server" yaml:"rpcServer"`
 }
 
-func InitConfig(args ...string) {
-	var env string
-	if len(args) > 0 {
-		env = args[0]
-	}
-
+// InitConfig 需要设置默认环境变量，当系统中存在环境变量值时，会优先使用
+// 系统标量（DANDELION_ENV）。configs 为自定义配置，可系统加载用户自定
+// 义配置
+func InitConfig(env string, configs ...interface{}) {
 	// 获取系统环境变量
 	osEnv := os.Getenv("DANDELION_ENV")
 	if osEnv != "" && osEnv != env {
@@ -68,10 +66,10 @@ func InitConfig(args ...string) {
 	configFileName = fmt.Sprintf("configs_%s", env)
 
 	// 加载配置
-	initConfig()
+	initConfig(configs)
 }
 
-func initConfig() {
+func initConfig(configs ...interface{}) {
 	// 获取配置目录
 	lookingConfig()
 
@@ -115,7 +113,14 @@ func initConfig() {
 	}
 	err = vip.Unmarshal(&Conf)
 	if err != nil {
-
 		panic(err)
+	}
+
+	// 加载自定义配置
+	for i, _ := range configs {
+		err = vip.Unmarshal(&configs[i])
+		if err != nil {
+			panic(err)
+		}
 	}
 }
