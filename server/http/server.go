@@ -2,7 +2,7 @@ package http
 
 import (
 	"fmt"
-	routing "github.com/qiangxue/fasthttp-routing"
+	routing "github.com/gly-hub/fasthttp-routing"
 	"github.com/valyala/fasthttp"
 )
 

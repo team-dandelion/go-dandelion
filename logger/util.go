@@ -11,6 +11,10 @@ const rfc3339Milli = "2006-01-02 15:04:05.000" //999后面是0则省略
 const rfc3339Micro = "2006-01-02 15:04:05.000000"
 const rfc3339Nano = "2006-01-02 15:04:05.999999999"
 
+func FormatTimeHeader(when time.Time) ([]byte, int) {
+	return formatTimeHeader(when)
+}
+
 func formatTimeHeader(when time.Time) ([]byte, int) {
 	//var str string = when.Format("2006-01-02 15:04:05")
 	var str string = when.Format(rfc3339Milli)

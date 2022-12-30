@@ -2,9 +2,11 @@ package gorm
 
 import (
 	"fmt"
+	"github.com/gly-hub/go-dandelion/logger"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -51,5 +53,13 @@ func NewConnection(config *Config) *gorm.DB {
 	conn.DB().SetMaxIdleConns(10)                   //最大空闲连接数
 	conn.DB().SetMaxOpenConns(30)                   //最大连接数
 	conn.DB().SetConnMaxLifetime(time.Second * 300) //设置连接空闲超时
+	conn.SetLogger(DBLogger{})
 	return conn
+}
+
+type DBLogger struct {
+}
+
+func (d DBLogger) Print(v ...interface{}) {
+	logger.Info(strings.Join(LogFormatter(v...), ""))
 }

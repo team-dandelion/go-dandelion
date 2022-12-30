@@ -2,10 +2,10 @@ package http
 
 import (
 	"encoding/json"
+	routing "github.com/gly-hub/fasthttp-routing"
 	error_support "github.com/gly-hub/go-dandelion/error-support"
 	"github.com/gly-hub/go-dandelion/logger"
 	jsoniter "github.com/json-iterator/go"
-	routing "github.com/qiangxue/fasthttp-routing"
 )
 
 type HttpController struct {
@@ -47,7 +47,6 @@ func (hc *HttpController) Fail(ctx *routing.Context, err error, msg ...string) e
 	}
 
 	error_support.Format(err, resp)
-
 
 	if len(msg) > 0 {
 		resp.Msg = msg[0]

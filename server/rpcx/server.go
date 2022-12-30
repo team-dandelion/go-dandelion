@@ -102,7 +102,7 @@ func (r *RPCxServer) Start() {
 	go func() {
 		err := r.s.Serve("tcp", fmt.Sprintf("%s", port))
 		if err != nil {
-			panic("RPCxServer Error")
+			panic(err)
 		}
 	}()
 

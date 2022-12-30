@@ -5,9 +5,9 @@ import (
 	sentinel "github.com/alibaba/sentinel-golang/api"
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/alibaba/sentinel-golang/core/system"
+	routing "github.com/gly-hub/fasthttp-routing"
 	"github.com/gly-hub/go-dandelion/logger"
 	jsoniter "github.com/json-iterator/go"
-	routing "github.com/qiangxue/fasthttp-routing"
 	"github.com/rs/xid"
 	"net/http"
 	"runtime"
@@ -24,7 +24,7 @@ func middlewareRequestLink() routing.Handler {
 		jsoniter.Unmarshal(c.PostBody(), &data)
 		body, _ := jsoniter.MarshalToString(data)
 
-		logger.Info("ip: %s, path: %s, params: %v", c.RequestCtx.Conn().RemoteAddr().String(), c.RequestURI(), body)
+		logger.Info("ip: %s, method: %s, path: %s, params: %v", c.RequestCtx.Conn().RemoteAddr().String(), string(c.Method()), c.RequestURI(), body)
 		defer func() {
 			logger.DeleteRequestId()
 		}()

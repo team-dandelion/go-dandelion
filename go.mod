@@ -5,12 +5,12 @@ go 1.17
 require (
 	github.com/FZambia/sentinel v1.1.1
 	github.com/alibaba/sentinel-golang v1.0.4
+	github.com/gly-hub/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/gomodule/redigo v1.8.9
 	github.com/jinzhu/gorm v1.9.16
 	github.com/mna/redisc v1.3.2
 	github.com/petermattis/goid v0.0.0-20221202122410-a449aaf35945
-	github.com/qiangxue/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87
 	github.com/rpcxio/rpcx-etcd v0.2.0
 	github.com/rs/xid v1.4.0
 	github.com/smallnest/rpcx v1.7.11

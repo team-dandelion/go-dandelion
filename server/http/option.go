@@ -1,6 +1,6 @@
 package http
 
-import routing "github.com/qiangxue/fasthttp-routing"
+import routing "github.com/gly-hub/fasthttp-routing"
 
 type (
 	Option  func(*options)
