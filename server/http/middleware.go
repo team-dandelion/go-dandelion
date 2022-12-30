@@ -18,18 +18,32 @@ func middlewareRequestLink() routing.Handler {
 	return func(c *routing.Context) error {
 		logger.SetRequestId(xid.New())
 		// 打印请求日志
-		//body := strings.ReplaceAll(string(), "\n", "")
-		//body = strings.ReplaceAll(body, "\t", "")
 		var data = make(map[string]interface{})
 		jsoniter.Unmarshal(c.PostBody(), &data)
 		body, _ := jsoniter.MarshalToString(data)
 
-		logger.Info("ip: %s, method: %s, path: %s, params: %v", c.RequestCtx.Conn().RemoteAddr().String(), string(c.Method()), c.RequestURI(), body)
+		err := c.Next()
+
+		var code = logger.Blue(fmt.Sprintf("[%v]", c.Response.StatusCode()))
+		if err != nil {
+			code = logger.Red(fmt.Sprintf("[%v]", err.(routing.HTTPError).StatusCode()))
+		}
+
+		if c.Response.StatusCode() != 200 {
+			code = logger.Red(fmt.Sprintf("[%v]", c.Response.StatusCode()))
+		}
+
+		result := string(c.Response.Body())
+		if len(result) > 500 {
+			result = result[:462] + "......" + result[len(result)-38:]
+		}
+
+		logger.Info("ip: %s, method: %s, path: %s, params: %v, result: %v %v", c.RequestCtx.Conn().RemoteAddr().String(), string(c.Method()), c.RequestURI(), body, result, code)
 		defer func() {
 			logger.DeleteRequestId()
 		}()
 
-		return c.Next()
+		return err
 	}
 }
 
