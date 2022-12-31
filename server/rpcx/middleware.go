@@ -20,7 +20,7 @@ type ServerLoggerPlugin struct {
 
 func (p *ServerLoggerPlugin) PreHandleRequest(ctx context.Context, r *protocol.Message) error {
 	logger.SetRequestId(r.Metadata["request_id"])
-	logger.Info("params: { client: %s, func: %s, content: %s }", r.Metadata["client_name"], r.ServiceMethod, r.Metadata["content"])
+	logger.Info("client: %s, server: %v, func: %s, params: %s", r.Metadata["client_name"], r.ServicePath, r.ServiceMethod, r.Metadata["content"])
 	return nil
 }
 

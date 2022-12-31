@@ -26,7 +26,10 @@ func middlewareRequestLink() routing.Handler {
 
 		var code = logger.Blue(fmt.Sprintf("[%v]", c.Response.StatusCode()))
 		if err != nil {
-			code = logger.Red(fmt.Sprintf("[%v]", err.(routing.HTTPError).StatusCode()))
+			switch err.(type) {
+			case routing.HTTPError:
+				code = logger.Red(fmt.Sprintf("[%v]", err.(routing.HTTPError).StatusCode()))
+			}
 		}
 
 		if c.Response.StatusCode() != 200 {

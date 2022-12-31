@@ -93,10 +93,8 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 		panic("请配置rpcx参数")
 	}
 	var hc http.HttpController
-	if string(ctx.Method()) != "GET" {
-		if err := hc.ReadJson(ctx, args); err != nil {
-			return hc.Fail(ctx, &error_support.Error{Code: 5000, Msg: "数据解析失败"})
-		}
+	if err := hc.ReadJson(ctx, args); err != nil {
+		return hc.Fail(ctx, &error_support.Error{Code: 5000, Msg: "数据解析失败"})
 	}
 
 	content, _ := jsoniter.MarshalToString(args)
