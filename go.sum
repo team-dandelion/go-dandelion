@@ -353,6 +353,8 @@ github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeME
 github.com/gliderlabs/ssh v0.1.1/go.mod h1:U7qILu1NlMHj9FlMhZLlkCdDnU1DBEAqr0aevW3Awn0=
 github.com/gly-hub/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87 h1:BF2JPUK/lcPyZAoiD+x96XpNRDfCTOg9x3IRYm6jKUU=
 github.com/gly-hub/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87/go.mod h1:IMEW7jkp6JY9C1LiPbLptWBuK4jQkNXBU2OEOW38okA=
+github.com/gly-hub/fasthttp-routing v0.0.0-20230103092213-f65d0ebb75bb h1:zowBxKRjLgDHbSHcF8FfgfZr9beRYG58tokwDAiWGe0=
+github.com/gly-hub/fasthttp-routing v0.0.0-20230103092213-f65d0ebb75bb/go.mod h1:+Y557LGCG89Q4TwIdXw3NF/HJqNjlxz+mT4VmC5uX+E=
 github.com/go-errors/errors v1.0.1/go.mod h1:f4zRHt4oKfwPJE5k8C9vpYG+aDHdBFUsgrm6/TyX73Q=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20191125211704-12ad95a8df72/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=

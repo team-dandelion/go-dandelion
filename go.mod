@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/FZambia/sentinel v1.1.1
 	github.com/alibaba/sentinel-golang v1.0.4
-	github.com/gly-hub/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87
+	github.com/gly-hub/fasthttp-routing v0.0.0-20230103092213-f65d0ebb75bb
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/gomodule/redigo v1.8.9
 	github.com/jinzhu/gorm v1.9.16

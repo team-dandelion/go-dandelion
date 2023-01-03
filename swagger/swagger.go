@@ -69,10 +69,10 @@ func PersistAuthorization(persistAuthorization bool) func(c *Config) {
 }
 
 // WrapHandler wraps swaggerFiles.Handler and returns echo.HandlerFunc
-var WrapHandler = FiberWrapHandler()
+var WrapHandler = RoutingWrapHandler()
 
 // FiberWrapHandler wraps `http.Handler` into `fiber.Handler`.
-func FiberWrapHandler(configFns ...func(c *Config)) routing.Handler {
+func RoutingWrapHandler(configFns ...func(c *Config)) routing.Handler {
 	var once sync.Once
 
 	handler := swaggerFiles.Handler

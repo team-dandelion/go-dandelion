@@ -18,6 +18,8 @@ var (
 	configFilePostfix string
 	// 文件地址
 	configFilePath string
+	// 系统环境
+	sysEnv string
 )
 
 // 支持的配置后缀
@@ -67,6 +69,12 @@ func InitConfig(env string, configs ...interface{}) {
 
 	// 加载配置
 	initConfig(configs)
+
+	sysEnv = env
+}
+
+func GetEnv() string {
+	return sysEnv
 }
 
 func initConfig(configs ...interface{}) {
