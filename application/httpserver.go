@@ -11,7 +11,7 @@ func initHttpServer() {
 	if config.Conf.HttpServer == nil {
 		return
 	}
-	httpServer = http.New(config.Conf.HttpServer.Port)
+	httpServer = http.New(config.Conf.HttpServer.Port, config.Conf.HttpServer.Pprof)
 }
 
 func HttpServer() *http.HttpServer {

@@ -1,7 +1,8 @@
 package config
 
 type HttpServer struct {
-	Port int32 `json:"port" yaml:"port"`
+	Port  int32 `json:"port" yaml:"port"`
+	Pprof int32 `json:"pprof" yaml:"pprof"`
 }
 
 type RpcServer struct {
@@ -11,4 +12,5 @@ type RpcServer struct {
 	Addr       string   `json:"addr" yaml:"addr"`
 	Port       int      `json:"port" yaml:"port"`
 	Model      int      `json:"model" yaml:"model"`
+	Pprof      int      `json:"pprof" yaml:"pprof"`
 }

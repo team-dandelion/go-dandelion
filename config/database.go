@@ -1,9 +1,5 @@
 package config
 
-import (
-	xtime "github.com/gly-hub/go-dandelion/tools/time"
-)
-
 type WDB struct {
 	Type     string `json:"type" yaml:"type"`
 	User     string `json:"user" yaml:"user"`
@@ -23,14 +19,14 @@ type RDB struct {
 }
 
 type Redis struct {
-	RedisType    string         `json:"redis_type" yaml:"redisType"` //cluster,alone,sentinel
-	Network      string         `json:"network" yaml:"network"`
-	StartAddr    []string       `json:"start_addr" yaml:"startAddr"` // Startup nodes
-	Active       int            `json:"active" yaml:"active"`
-	Idle         int            `json:"idle" yaml:"idle"`
-	Auth         string         `json:"auth" yaml:"auth"`
-	ConnTimeout  xtime.Duration `json:"conn_timeout" yaml:"connTimeout"`   // Connection timeout
-	ReadTimeout  xtime.Duration `json:"read_timeout" yaml:"readTimeout"`   // Read timeout
-	WriteTimeout xtime.Duration `json:"write_timeout" yaml:"writeTimeout"` // Write timeout
-	IdleTimeout  xtime.Duration `json:"idle_timeout" yaml:"idleTimeout"`
+	RedisType    string   `json:"redis_type" yaml:"redisType"` //cluster,alone,sentinel
+	Network      string   `json:"network" yaml:"network"`
+	StartAddr    []string `json:"start_addr" yaml:"startAddr"` // Startup nodes
+	Active       int      `json:"active" yaml:"active"`
+	Idle         int      `json:"idle" yaml:"idle"`
+	Auth         string   `json:"auth" yaml:"auth"`
+	ConnTimeout  string   `json:"conn_timeout" yaml:"connTimeout"`   // Connection timeout
+	ReadTimeout  string   `json:"read_timeout" yaml:"readTimeout"`   // Read timeout
+	WriteTimeout string   `json:"write_timeout" yaml:"writeTimeout"` // Write timeout
+	IdleTimeout  string   `json:"idle_timeout" yaml:"idleTimeout"`
 }

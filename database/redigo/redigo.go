@@ -57,7 +57,7 @@ func (c *Client) Subscribe(fn SubscribeFunc) error {
 	if err != nil {
 		return err
 	}
-	defer conn.Close()
+	//defer conn.Close()
 	return fn(redis.PubSubConn{Conn: conn})
 }
 

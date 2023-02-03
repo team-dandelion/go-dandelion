@@ -13,7 +13,11 @@ import (
 	"github.com/gly-hub/go-dandelion/tools/stringx"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/smallnest/rpcx/share"
+	"net"
+	httpx "net/http"
+	_ "net/http/pprof"
 	"reflect"
+	"strconv"
 )
 
 var rpc *rpcServer
@@ -43,6 +47,12 @@ func initRpcServer() {
 	rpcx.SetBase(rpc.BasePath, rpc.Etcd)
 	if config.Conf.RpcServer.Model != 0 {
 		rpc.client = rpcx.NewRPCXClient(config.Conf.RpcServer.Model)
+	}
+	if config.Conf.RpcServer.Pprof != 0 {
+		go func() {
+			listener, _ := net.Listen("tcp", net.JoinHostPort("", strconv.Itoa(config.Conf.RpcServer.Pprof)))
+			_ = httpx.Serve(listener, nil)
+		}()
 	}
 }
 
@@ -119,7 +129,7 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 		return hc.Fail(ctx, &error_support.Error{Code: int(rv.FieldByName("Code").Int()), Msg: rv.FieldByName("Msg").String()})
 	}
 
-	return hc.Success(ctx, reply, "")
+	return hc.Success(ctx, reply, rv.FieldByName("Msg").String())
 }
 
 func RpcServer(handler interface{}, auth ...rpcx.AuthCall) {
