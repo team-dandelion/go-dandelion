@@ -4,7 +4,7 @@ import (
 	"github.com/gly-hub/go-dandelion/config"
 	"github.com/gly-hub/go-dandelion/database/redigo"
 	"github.com/gly-hub/go-dandelion/database/redigo/smart_redis"
-	"github.com/spf13/cast"
+	timex "github.com/gly-hub/go-dandelion/tools/time"
 )
 
 var redis *smart_redis.SmartRedis
@@ -21,10 +21,10 @@ func initRedis() {
 		Active:       config.Conf.Redis.Active,
 		Idle:         config.Conf.Redis.Idle,
 		Auth:         config.Conf.Redis.Auth,
-		ConnTimeout:  cast.ToDuration(config.Conf.Redis.ConnTimeout),
-		ReadTimeout:  cast.ToDuration(config.Conf.Redis.ReadTimeout),
-		WriteTimeout: cast.ToDuration(config.Conf.Redis.WriteTimeout),
-		IdleTimeout:  cast.ToDuration(config.Conf.Redis.IdleTimeout),
+		ConnTimeout:  timex.ParseDuration(config.Conf.Redis.ConnTimeout),
+		ReadTimeout:  timex.ParseDuration(config.Conf.Redis.ReadTimeout),
+		WriteTimeout: timex.ParseDuration(config.Conf.Redis.WriteTimeout),
+		IdleTimeout:  timex.ParseDuration(config.Conf.Redis.IdleTimeout),
 	})
 	if err != nil {
 		panic(err)

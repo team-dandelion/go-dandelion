@@ -1,17 +1,11 @@
 package time
 
-import (
-	xtime "time"
-)
+import "time"
 
-// Duration be used toml unmarshal string time, like 1s, 500ms.
-type Duration xtime.Duration
-
-// UnmarshalText unmarshal text to duration.
-func (d *Duration) UnmarshalText(text []byte) error {
-	tmp, err := xtime.ParseDuration(string(text))
-	if err == nil {
-		*d = Duration(tmp)
+func ParseDuration(str string) time.Duration {
+	if dra, err := time.ParseDuration(str); err != nil {
+		return time.Millisecond * 100
+	} else {
+		return dra
 	}
-	return err
 }
