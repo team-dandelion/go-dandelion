@@ -61,7 +61,7 @@ var levelName = [LevelDebug + 1]string{"Emergency",
 
 type logger interface {
 	init() error
-	writeMsg(when time.Time, msg string, level int) error
+	writeMsg(when time.Time, msg string, level int, l int) error
 	destroy()
 	flush()
 }
@@ -92,6 +92,7 @@ type logMsg struct {
 	level               int
 	msg                 string
 	when                time.Time
+	len                 int
 	customFuncCallDepth int //自定义函数路径深度
 }
 
@@ -192,7 +193,7 @@ func (l *loggers) startLogger() {
 	for {
 		select {
 		case bm := <-l.msgChan:
-			l.writeTologgers(bm.when, bm.msg, bm.level)
+			l.writeTologgers(bm.when, bm.msg, bm.level, bm.len)
 
 		case sg := <-l.signalChan:
 
@@ -210,7 +211,7 @@ func (l *loggers) startLogger() {
 	}
 }
 
-func (l *loggers) writeTologgers(when time.Time, msg string, level int) {
+func (l *loggers) writeTologgers(when time.Time, msg string, level int, heard int) {
 	for _, lg := range l.outputs {
 		if level > lg.level {
 			continue
@@ -219,7 +220,7 @@ func (l *loggers) writeTologgers(when time.Time, msg string, level int) {
 			l.consolePluse {
 			continue
 		}
-		err := lg.writeMsg(when, msg, level)
+		err := lg.writeMsg(when, msg, level, heard)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "不能输出到adapter: %v，error：%v\n", lg.name, err)
 		}
@@ -251,20 +252,23 @@ func (l *loggers) writeMsg(customFuncCallDepth int, level int, msg string, v ...
 		}
 	}
 
-	msg = levelPrefix[level] + msg
-
+	head := levelPrefix[level]
 	if GetRequestId() != nil {
-		msg = fmt.Sprintf("[requestId: %v] \t", GetRequestId()) + msg
+		head = fmt.Sprintf("[requestId: %v] \t", GetRequestId()) + head
 	}
+	headLen := len(head)
+
+	msg = head + msg
 
 	if l.asynchronous {
 		lm := new(logMsg)
 		lm.level = level
 		lm.msg = msg
 		lm.when = when
+		lm.len = headLen
 		l.msgChan <- lm
 	} else {
-		l.writeTologgers(when, msg, level)
+		l.writeTologgers(when, msg, level, headLen)
 	}
 }
 func (l *loggers) Emergency(customFuncCallDepth int, format string, v ...interface{}) {

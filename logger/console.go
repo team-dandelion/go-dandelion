@@ -28,7 +28,7 @@ func (c *consoleWrite) init() error {
 	return nil
 }
 
-func (c *consoleWrite) writeMsg(when time.Time, msg string, level int) error {
+func (c *consoleWrite) writeMsg(when time.Time, msg string, level int, l int) error {
 	c.Lock()
 	defer c.Unlock()
 	b, _ := formatTimeHeader(when)
@@ -41,13 +41,13 @@ func (c *consoleWrite) writeMsg(when time.Time, msg string, level int) error {
 	} else {
 		switch level {
 		case 6:
-			fmt.Printf("%v %v \n", string(b), Green(msg))
+			fmt.Printf("%v %v%v \n", string(b), Green(msg[:l]), msg[l:])
 		case 3:
-			fmt.Printf("%v %v \n", string(b), Red(msg))
+			fmt.Printf("%v %v%v \n", string(b), Red(msg[:l]), msg[l:])
 		case 4:
-			fmt.Printf("%v %v \n", string(b), Yellow(msg))
+			fmt.Printf("%v %v%v \n", string(b), Yellow(msg[:l]), msg[l:])
 		case 7:
-			fmt.Printf("%v %v \n", string(b), Blue(msg))
+			fmt.Printf("%v %v%v \n", string(b), Blue(msg[:l]), msg[l:])
 		}
 	}
 	return nil

@@ -2,64 +2,146 @@ package gorm
 
 import (
 	"fmt"
-	"github.com/gly-hub/go-dandelion/logger"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
-	"log"
-	"strings"
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/plugin/dbresolver"
 	"time"
 )
 
-type DBType string
-
 const (
-	Mysql    DBType = "mysql"
-	Postgres DBType = "postgres"
+	Mysql    = "mysql"
+	Postgres = "postgres"
 )
 
-type Config struct {
-	Type     DBType `json:"type"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	Name     string `json:"name"`
-}
-
 func NewConnection(config *Config) *gorm.DB {
-	var dbUri string
-	switch config.Type {
+	var db *gorm.DB
+	switch config.DBType {
 	case Mysql:
-		dbUri = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true",
-			config.User,
-			config.Password,
-			config.Host,
-			config.Port,
-			config.Name)
+		db = initMysql(config)
 	case Postgres:
-		dbUri = fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
-			config.Host,
-			config.Port,
-			config.User,
-			config.Name,
-			config.Password)
+		db = initPostgres(config)
 	default:
 		panic("未检测到支持的数据库类型")
 	}
-	conn, err := gorm.Open(string(config.Type), dbUri)
-	if err != nil {
-		log.Print(err.Error())
+	return db
+}
+
+func initMysql(config *Config) *gorm.DB {
+	if config.Master == nil {
+		panic("未检测到主库配置")
 	}
-	conn.DB().SetMaxIdleConns(10)                   //最大空闲连接数
-	conn.DB().SetMaxOpenConns(30)                   //最大连接数
-	conn.DB().SetConnMaxLifetime(time.Second * 300) //设置连接空闲超时
-	conn.SetLogger(DBLogger{})
-	return conn
+	// 初始化master
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true",
+		config.Master.User,
+		config.Master.Password,
+		config.Master.Host,
+		config.Master.Port,
+		config.Master.DataBase)
+
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: &Logger{
+		Level:         logger.LogLevel(config.Level),
+		SlowThreshold: config.SlowThreshold,
+	}})
+	//db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.LogLevel(config.Level))})
+	if err != nil {
+		panic(err)
+	}
+
+	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
+	sqlDB, dErr := db.DB()
+	if dErr != nil {
+		panic(dErr)
+	}
+
+	// SetMaxIdleConns 用于设置连接池中空闲连接的最大数量。
+	sqlDB.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns 设置打开数据库连接的最大数量。
+	sqlDB.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime 设置了连接可复用的最大时间。
+	sqlDB.SetConnMaxLifetime(time.Hour)
+
+	if config.Slaves != nil {
+		// 初始化slave
+		var slaveDsns []gorm.Dialector
+		for _, slave := range config.Slaves {
+			slaveDsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true",
+				slave.User,
+				slave.Password,
+				slave.Host,
+				slave.Port,
+				slave.DataBase)
+			slaveDsns = append(slaveDsns, mysql.Open(slaveDsn))
+		}
+		db.Use(dbresolver.Register(dbresolver.Config{
+			Replicas:          slaveDsns,
+			Policy:            dbresolver.RandomPolicy{},
+			TraceResolverMode: true,
+		}).
+			SetConnMaxIdleTime(time.Duration(config.MaxIdleTime) * time.Second).
+			SetConnMaxLifetime(time.Duration(config.MaxLifeTime) * time.Second).
+			SetMaxIdleConns(config.MaxIdleConn).
+			SetMaxOpenConns(config.MaxOpenConn))
+	}
+	return db
 }
 
-type DBLogger struct {
-}
+func initPostgres(config *Config) *gorm.DB {
+	if config.Master == nil {
+		panic("未检测到主库配置")
+	}
+	// 初始化master
+	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
+		config.Master.Host,
+		config.Master.Port,
+		config.Master.User,
+		config.Master.DataBase,
+		config.Master.Password)
 
-func (d DBLogger) Print(v ...interface{}) {
-	logger.Info(strings.Join(LogFormatter(v...), ""))
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
+	sqlDB, dErr := db.DB()
+	if dErr != nil {
+		panic(dErr)
+	}
+
+	// SetMaxIdleConns 用于设置连接池中空闲连接的最大数量。
+	sqlDB.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns 设置打开数据库连接的最大数量。
+	sqlDB.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime 设置了连接可复用的最大时间。
+	sqlDB.SetConnMaxLifetime(time.Hour)
+
+	if config.Slaves != nil {
+		// 初始化slave
+		var slaveDsns []gorm.Dialector
+		for _, slave := range config.Slaves {
+			slaveDsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
+				slave.Host,
+				slave.Port,
+				slave.User,
+				slave.DataBase,
+				slave.Password)
+			slaveDsns = append(slaveDsns, postgres.Open(slaveDsn))
+		}
+		db.Use(dbresolver.Register(dbresolver.Config{
+			Replicas:          slaveDsns,
+			Policy:            dbresolver.RandomPolicy{},
+			TraceResolverMode: true,
+		}).
+			SetConnMaxIdleTime(time.Duration(config.MaxIdleTime) * time.Second).
+			SetConnMaxLifetime(time.Duration(config.MaxLifeTime) * time.Second).
+			SetMaxIdleConns(config.MaxIdleConn).
+			SetMaxOpenConns(config.MaxOpenConn))
+	}
+	return db
 }

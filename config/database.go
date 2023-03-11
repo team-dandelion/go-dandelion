@@ -1,21 +1,31 @@
 package config
 
-type WDB struct {
-	Type     string `json:"type" yaml:"type"`
-	User     string `json:"user" yaml:"user"`
-	Password string `json:"password" yaml:"password"`
-	Host     string `json:"host" yaml:"host"`
-	Port     string `json:"port" yaml:"port"`
-	Name     string `json:"name" yaml:"name"`
+type DB struct {
+	DBType        string   `json:"db_type" yaml:"dbType"`
+	MaxOpenConn   int      `json:"max_open_conn" yaml:"maxOpenConn"`
+	MaxIdleConn   int      `json:"max_idle_conn" yaml:"maxIdleConn"`
+	MaxLifeTime   int      `json:"max_life_time" yaml:"maxLifeTime"`
+	MaxIdleTime   int      `json:"max_idle_time" yaml:"maxIdleTime"`
+	Level         int      `json:"level" yaml:"level"`
+	SlowThreshold string   `json:"slow_threshold" yaml:"slowThreshold"`
+	Master        *Master  `json:"master" yaml:"master"`
+	Slaves        []*Slave `json:"slaves" yaml:"slaves"`
 }
 
-type RDB struct {
-	Type     string `json:"type" yaml:"type"`
+type Master struct {
 	User     string `json:"user" yaml:"user"`
 	Password string `json:"password" yaml:"password"`
 	Host     string `json:"host" yaml:"host"`
 	Port     string `json:"port" yaml:"port"`
-	Name     string `json:"name" yaml:"name"`
+	Database string `json:"data_base" yaml:"database"`
+}
+
+type Slave struct {
+	User     string `json:"user" yaml:"user"`
+	Password string `json:"password" yaml:"password"`
+	Host     string `json:"host" yaml:"host"`
+	Port     string `json:"port" yaml:"port"`
+	Database string `json:"data_base" yaml:"database"`
 }
 
 type Redis struct {

@@ -20,7 +20,7 @@ func (f *fileWrite) init() error {
 	return nil
 }
 
-func (f *fileWrite) writeMsg(when time.Time, msg string, level int) error {
+func (f *fileWrite) writeMsg(when time.Time, msg string, level int, headLen int) error {
 	//	f.Lock()
 	//	defer f.Unlock()
 	b, _ := formatTimeHeader(when)

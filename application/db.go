@@ -3,34 +3,49 @@ package application
 import (
 	"github.com/gly-hub/go-dandelion/config"
 	dgorm "github.com/gly-hub/go-dandelion/database/gorm"
-	"github.com/jinzhu/gorm"
+	"github.com/gly-hub/go-dandelion/logger"
+	timex "github.com/gly-hub/go-dandelion/tools/time"
+	zedis "github.com/gomodule/redigo/redis"
+	jsoniter "github.com/json-iterator/go"
+	"gorm.io/gorm"
 )
 
 var (
-	wdb *gorm.DB
-	rdb *gorm.DB
+	baseDB *gorm.DB
+	appDB  *dgorm.AppDB
 )
 
 func initDb() {
-	if config.Conf.WDB != nil {
-		wdb = dgorm.NewConnection(&dgorm.Config{
-			Type:     dgorm.DBType(config.Conf.WDB.Type),
-			User:     config.Conf.WDB.User,
-			Password: config.Conf.WDB.Password,
-			Host:     config.Conf.WDB.Host,
-			Port:     config.Conf.WDB.Port,
-			Name:     config.Conf.WDB.Name,
-		})
-	}
+	if config.Conf.DB != nil && config.Conf.DB.Master != nil {
+		var slaves []*dgorm.Slave
+		if config.Conf.DB.Slaves != nil {
+			for _, slave := range config.Conf.DB.Slaves {
+				slaves = append(slaves, &dgorm.Slave{
+					Host:     slave.Host,
+					Port:     slave.Port,
+					User:     slave.User,
+					Password: slave.Password,
+					Database: slave.Database,
+				})
+			}
+		}
 
-	if config.Conf.RDB != nil {
-		rdb = dgorm.NewConnection(&dgorm.Config{
-			Type:     dgorm.DBType(config.Conf.RDB.Type),
-			User:     config.Conf.RDB.User,
-			Password: config.Conf.RDB.Password,
-			Host:     config.Conf.RDB.Host,
-			Port:     config.Conf.RDB.Port,
-			Name:     config.Conf.RDB.Name,
+		baseDB = dgorm.NewConnection(&dgorm.Config{
+			DBType:        config.Conf.DB.DBType,
+			MaxOpenConn:   config.Conf.DB.MaxOpenConn,
+			MaxIdleConn:   config.Conf.DB.MaxIdleConn,
+			MaxLifeTime:   config.Conf.DB.MaxLifeTime,
+			MaxIdleTime:   config.Conf.DB.MaxIdleTime,
+			Level:         config.Conf.DB.Level,
+			SlowThreshold: timex.ParseDuration(config.Conf.DB.SlowThreshold),
+			Master: &dgorm.Master{
+				Host:     config.Conf.DB.Master.Host,
+				Port:     config.Conf.DB.Master.Port,
+				User:     config.Conf.DB.Master.User,
+				Password: config.Conf.DB.Master.Password,
+				Database: config.Conf.DB.Master.Database,
+			},
+			Slaves: slaves,
 		})
 	}
 	return
@@ -39,15 +54,50 @@ func initDb() {
 type DB struct {
 }
 
-// GetWDB 获取写库
-func (d *DB) GetWDB() *gorm.DB {
-	return wdb.Debug()
+// GetDB 获取写库
+// 默认返回系统基础库
+func (d *DB) GetDB(args ...string) *gorm.DB {
+	if len(args) > 0 {
+		return appDB.GetDB(args[0])
+	}
+	return baseDB
 }
 
-// GetRDB 获取读库
-func (d *DB) GetRDB() *gorm.DB {
-	if rdb == nil {
-		return wdb.Debug()
+const (
+	GoDandelionConnChange = "go_dandelion_conn_change"
+)
+
+// InitAppDB 初始化应用数据库
+// configFunc 定义获取相关应用数据库连接方法。用于在应
+// 用数据库连接发生变更行为时，各服务自动获取最新的数据
+// 库连接，不用额外进行重连刷新操作
+//
+// changeFunc 定义相关数据库变更时，业务需要执行的方法
+// 发生变更时，进行回调处理。如，增加新的应用，服务需要
+// 创建表单等操作
+func InitAppDB(configFunc dgorm.AppConfigFunc, changeFunc dgorm.AppChangeFunc) {
+	// 使用这个必须有redis配置才行
+	if config.Conf.Redis == nil {
+		panic("使用该服务必须有redis配置才行。订阅服务依赖于redis")
 	}
-	return rdb.Debug()
+	appDB = dgorm.InitAppDB(configFunc, changeFunc, redis.Client)
+	appDB.Listener()
+}
+
+// AppDBChange 用于上报应用数据库发生变更。
+// 如中心服务器修改应用数据库，则需要上报，运
+// 营服务订阅到消息后，自动刷新应用数据库连接
+func AppDBChange(appKey string, changeType dgorm.ChangeType) error {
+	msg, err := jsoniter.MarshalToString(&dgorm.AppDBMessage{
+		AppKey:     appKey,
+		ChangeType: changeType,
+	})
+	if err != nil {
+		logger.Error(err)
+		return nil
+	}
+	_, err = redis.Client.Execute(func(c zedis.Conn) (res interface{}, err error) {
+		return c.Do("PUBLISH", GoDandelionConnChange, msg)
+	})
+	return err
 }

@@ -41,8 +41,7 @@ const (
 var Conf Config
 
 type Config struct {
-	WDB        *WDB        `json:"wdb" yaml:"wdb"`
-	RDB        *RDB        `json:"rdb" yaml:"rdb"`
+	DB         *DB         `json:"db" yaml:"db"`
 	Redis      *Redis      `json:"redis" yaml:"redis"`
 	Logger     *Logger     `json:"logger" yaml:"logger"`
 	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
