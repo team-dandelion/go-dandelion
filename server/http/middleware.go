@@ -7,6 +7,7 @@ import (
 	"github.com/alibaba/sentinel-golang/core/system"
 	routing "github.com/gly-hub/fasthttp-routing"
 	"github.com/gly-hub/go-dandelion/logger"
+	"github.com/gly-hub/go-dandelion/telemetry"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/rs/xid"
 	"net/http"
@@ -33,11 +34,22 @@ func checkLogIgnoreResult(path string) bool {
 // middlewareRequestLink 请求链路
 func middlewareRequestLink() routing.Handler {
 	return func(c *routing.Context) error {
-		logger.SetRequestId(xid.New())
+		traceId := xid.New().String()
+		logger.SetRequestId(traceId)
 		// 打印请求日志
 		var data = make(map[string]interface{})
 		jsoniter.Unmarshal(c.PostBody(), &data)
 		body, _ := jsoniter.MarshalToString(data)
+
+		span, spanTraceId, sErr := telemetry.StartSpan(string(c.Method()), traceId, true)
+		if sErr == nil {
+			telemetry.SpanSetTag(span, "url", string(c.RequestURI()))
+			telemetry.SpanSetTag(span, "request_id", traceId)
+			telemetry.SetSpanTraceId(spanTraceId)
+			defer func() {
+				telemetry.FinishSpan(span)
+			}()
+		}
 
 		err := c.Next()
 

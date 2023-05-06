@@ -80,7 +80,7 @@ func (client *AppDB) Listener() {
 			client.db.Delete(msg.AppKey)
 		}
 	})
-	go tools.PSubscribeListen(client.redis)
+	//go tools.PSubscribeListen(client.redis)
 }
 
 func (client *AppDB) Connetion(appKey string) error {

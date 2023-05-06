@@ -4,7 +4,6 @@ import (
 	"github.com/gly-hub/go-dandelion/config"
 	"github.com/gly-hub/go-dandelion/database/redigo"
 	"github.com/gly-hub/go-dandelion/database/redigo/smart_redis"
-	"github.com/gly-hub/go-dandelion/database/redigo/tools"
 	timex "github.com/gly-hub/go-dandelion/tools/time"
 )
 
@@ -31,7 +30,7 @@ func initRedis() {
 		panic(err)
 	}
 
-	err = tools.PSubscribeListen(redis.Client)
+	//err = tools.PSubscribeListen(redis.Client)
 	if err != nil {
 		panic(err)
 	}

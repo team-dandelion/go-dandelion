@@ -1,9 +1,10 @@
 package alone
 
 import (
-	"github.com/gomodule/redigo/redis"
-
+	"context"
 	"github.com/gly-hub/go-dandelion/database/redigo"
+	"github.com/gly-hub/go-dandelion/database/redigo/logger"
+	"github.com/gomodule/redigo/redis"
 )
 
 type aloneMode struct{ pool redis.Pool }
@@ -32,8 +33,12 @@ func New(optFuncs ...OptFunc) redigo.ModeInterface {
 		optFunc(&opts)
 	}
 	pool := redis.Pool{
-		Dial: func() (conn redis.Conn, e error) {
-			return redis.Dial("tcp", opts.addr, opts.dialOpts...)
+		DialContext: func(ctx context.Context) (redis.Conn, error) {
+			conn, err := redis.Dial("tcp", opts.addr, opts.dialOpts...)
+			if err != nil {
+				return nil, err
+			}
+			return &logger.LoggingConn{conn}, nil
 		},
 	}
 	for _, poolOptFunc := range opts.poolOpts {

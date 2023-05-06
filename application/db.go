@@ -1,6 +1,7 @@
 package application
 
 import (
+	"errors"
 	"github.com/gly-hub/go-dandelion/config"
 	dgorm "github.com/gly-hub/go-dandelion/database/gorm"
 	"github.com/gly-hub/go-dandelion/logger"
@@ -54,11 +55,10 @@ func initDb() {
 type DB struct {
 }
 
-// GetDB 获取写库
-// 默认返回系统基础库
-func (d *DB) GetDB(args ...string) *gorm.DB {
-	if len(args) > 0 {
-		return appDB.GetDB(args[0])
+// GetDB 获取数据库连接
+func (*DB) GetDB(appKeys ...string) *gorm.DB {
+	if len(appKeys) > 0 {
+		return appDB.GetDB(appKeys[0])
 	}
 	return baseDB
 }
@@ -87,7 +87,11 @@ func InitAppDB(configFunc dgorm.AppConfigFunc, changeFunc dgorm.AppChangeFunc) {
 // AppDBChange 用于上报应用数据库发生变更。
 // 如中心服务器修改应用数据库，则需要上报，运
 // 营服务订阅到消息后，自动刷新应用数据库连接
+// 依赖于redis
 func AppDBChange(appKey string, changeType dgorm.ChangeType) error {
+	if redis == nil {
+		return errors.New("redis未初始化")
+	}
 	msg, err := jsoniter.MarshalToString(&dgorm.AppDBMessage{
 		AppKey:     appKey,
 		ChangeType: changeType,

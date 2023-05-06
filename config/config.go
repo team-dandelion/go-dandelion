@@ -42,10 +42,11 @@ var Conf Config
 
 type Config struct {
 	DB         *DB         `json:"db" yaml:"db"`
-	Redis      *Redis      `json:"redis" yaml:"redis"`
+	Redis      *Redis      `json:"redis-plus" yaml:"redis-plus"`
 	Logger     *Logger     `json:"logger" yaml:"logger"`
 	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
 	RpcServer  *RpcServer  `json:"rpc_server" yaml:"rpcServer"`
+	Tracer     *Tracer     `json:"tracer" yaml:"tracer"`
 }
 
 // InitConfig 需要设置默认环境变量，当系统中存在环境变量值时，会优先使用
@@ -119,6 +120,30 @@ func initConfig(configs ...interface{}) {
 		panic(err)
 	}
 	err = vip.Unmarshal(&Conf)
+	if err != nil {
+		panic(err)
+	}
+
+	// 加载自定义配置
+	for i, _ := range configs {
+		err = vip.Unmarshal(&configs[i])
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func LoadCustomConfig(configs ...interface{}) {
+	vip := viper.New()
+	vip.AddConfigPath(appConfigPath)
+	vip.SetConfigName(configFileName)
+	vip.SetConfigType(configFilePostfix)
+
+	//尝试进行配置读取
+	if err := vip.ReadInConfig(); err != nil {
+		panic(err)
+	}
+	err := vip.Unmarshal(&Conf)
 	if err != nil {
 		panic(err)
 	}

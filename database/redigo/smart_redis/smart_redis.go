@@ -71,5 +71,5 @@ func NewSmartRedis(conf *Config) (*SmartRedis, error) {
 			Client:    client,
 		}, nil
 	}
-	return nil, errors.New("redis no this mode")
+	return nil, errors.New("redis-plus no this mode")
 }

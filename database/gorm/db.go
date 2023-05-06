@@ -38,7 +38,7 @@ func initMysql(config *Config) *gorm.DB {
 		config.Master.Password,
 		config.Master.Host,
 		config.Master.Port,
-		config.Master.DataBase)
+		config.Master.Database)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: &Logger{
 		Level:         logger.LogLevel(config.Level),
@@ -73,7 +73,7 @@ func initMysql(config *Config) *gorm.DB {
 				slave.Password,
 				slave.Host,
 				slave.Port,
-				slave.DataBase)
+				slave.Database)
 			slaveDsns = append(slaveDsns, mysql.Open(slaveDsn))
 		}
 		db.Use(dbresolver.Register(dbresolver.Config{
@@ -98,7 +98,7 @@ func initPostgres(config *Config) *gorm.DB {
 		config.Master.Host,
 		config.Master.Port,
 		config.Master.User,
-		config.Master.DataBase,
+		config.Master.Database,
 		config.Master.Password)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -129,7 +129,7 @@ func initPostgres(config *Config) *gorm.DB {
 				slave.Host,
 				slave.Port,
 				slave.User,
-				slave.DataBase,
+				slave.Database,
 				slave.Password)
 			slaveDsns = append(slaveDsns, postgres.Open(slaveDsn))
 		}

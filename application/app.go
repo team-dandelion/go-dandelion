@@ -18,4 +18,7 @@ func Init() {
 
 	// 初始化Rpc
 	initRpcServer()
+
+	// 初始化链路追踪
+	initTracer()
 }

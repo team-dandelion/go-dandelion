@@ -28,7 +28,7 @@ func PSubscribeListen(conn *redigo.Client) (err error) {
 		// 订阅过期事件
 		err = c.PSubscribe(ExpireEvent)
 		if err != nil {
-			logger.Error("redis Subscribe error.")
+			logger.Error("redis-plus Subscribe error.")
 			return err
 		}
 		cbMap.Store(string(ExpireEvent), timeoutEventCallBack)
@@ -47,7 +47,7 @@ func PSubscribeListen(conn *redigo.Client) (err error) {
 					logger.Info("%s: %s %d", res.Channel, res.Kind, res.Count)
 				case error:
 					logger.Error("error handle...")
-					continue
+					break
 				}
 			}
 		}()

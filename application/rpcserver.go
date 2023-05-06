@@ -9,6 +9,7 @@ import (
 	"github.com/gly-hub/go-dandelion/logger"
 	"github.com/gly-hub/go-dandelion/server/http"
 	"github.com/gly-hub/go-dandelion/server/rpcx"
+	"github.com/gly-hub/go-dandelion/telemetry"
 	"github.com/gly-hub/go-dandelion/tools/ip"
 	"github.com/gly-hub/go-dandelion/tools/stringx"
 	jsoniter "github.com/json-iterator/go"
@@ -73,10 +74,15 @@ func RpcCall(ctx *routing.Context, serverName, funcName string, args interface{}
 	var c = context.Background()
 
 	content, _ := jsoniter.MarshalToString(args)
+	var traceId string
+	if telemetry.GetSpanTraceId() != nil {
+		traceId = telemetry.GetSpanTraceId().(string)
+	}
 	requestHeader := map[string]string{
-		"request_id":  stringx.Strval(logger.GetRequestId()),
-		"client_name": rpc.ServerName,
-		"content":     content,
+		"request_id":    stringx.Strval(logger.GetRequestId()),
+		"span_trace_id": traceId,
+		"client_name":   rpc.ServerName,
+		"content":       content,
 	}
 
 	requestHeader = rpc.headerFunc(ctx, requestHeader)
@@ -108,10 +114,15 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 	}
 
 	content, _ := jsoniter.MarshalToString(args)
+	var traceId string
+	if telemetry.GetSpanTraceId() != nil {
+		traceId = telemetry.GetSpanTraceId().(string)
+	}
 	requestHeader := map[string]string{
-		"request_id":  stringx.Strval(logger.GetRequestId()),
-		"client_name": rpc.ServerName,
-		"content":     content,
+		"request_id":    stringx.Strval(logger.GetRequestId()),
+		"span_trace_id": traceId,
+		"client_name":   rpc.ServerName,
+		"content":       content,
 	}
 	requestHeader = rpc.headerFunc(ctx, requestHeader)
 	c := context.Background()

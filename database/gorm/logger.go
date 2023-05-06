@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	loggerx "github.com/gly-hub/go-dandelion/logger"
+	"github.com/gly-hub/go-dandelion/telemetry"
 	glogger "gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"
 	"strconv"
@@ -45,6 +46,14 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 		return
 	}
 
+	tranceId := telemetry.GetSpanTraceId()
+	if tranceId != nil {
+		span, _, _ := telemetry.StartSpan("GORM", tranceId.(string), false)
+		telemetry.SpanSetTag(span, "request_id", loggerx.GetRequestId())
+		defer func() {
+			telemetry.FinishSpan(span)
+		}()
+	}
 	elapsed := time.Since(begin)
 	switch {
 	case err != nil && logger.Level >= glogger.Error && (!errors.Is(err, glogger.ErrRecordNotFound) || !logger.IgnoreRecordNotFoundError):
@@ -56,7 +65,7 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 			rowStr = strconv.FormatInt(rows, 10)
 		}
 		msg := fmt.Sprintf("%v %v %v\t%v",
-			loggerx.Blue(fmt.Sprintf("[%.3fms] [rows:%v]", float64(elapsed.Nanoseconds())/1e6, rowStr)),
+			loggerx.Blue(fmt.Sprintf("[gorm] [%.3fms] [rows:%v]", float64(elapsed.Nanoseconds())/1e6, rowStr)),
 			sql,
 			loggerx.Red(err.Error()),
 			utils.FileWithLineNum())
@@ -69,7 +78,8 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 		} else {
 			rowStr = strconv.FormatInt(rows, 10)
 		}
-		msg := fmt.Sprintf("%v %v %v\t%v",
+		msg := fmt.Sprintf("%v %v %v %v\t%v",
+			loggerx.Blue("[gorm]"),
 			loggerx.Red(fmt.Sprintf("[%.3fms]>= %v", float64(elapsed.Nanoseconds())/1e6, logger.SlowThreshold)),
 			loggerx.Blue(fmt.Sprintf("[rows:%v]", rowStr)),
 			sql,
@@ -84,7 +94,7 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 			rowStr = strconv.FormatInt(rows, 10)
 		}
 		msg := fmt.Sprintf("%v %v",
-			loggerx.Blue(fmt.Sprintf("[%.3fms] [rows:%v]", float64(elapsed.Nanoseconds())/1e6, rowStr)),
+			loggerx.Blue(fmt.Sprintf("[gorm] [%.3fms] [rows:%v]", float64(elapsed.Nanoseconds())/1e6, rowStr)),
 			sql)
 		loggerx.Info(msg)
 	}
