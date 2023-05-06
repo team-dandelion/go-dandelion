@@ -41,7 +41,7 @@ func InitTracer(serviceName, agentHostPort string) error {
 	return nil
 }
 
-func getParentSpan(operationName, traceId string, startIfNoParent bool) (span opentracing.Span, err error) {
+func getParentSpan(operationName, traceId string, startIfNoParent bool, startTime opentracing.StartSpanOption) (span opentracing.Span, err error) {
 	if Tracer == nil {
 		err = errors.New("jaeger tracing error : Tracer is nil")
 		fmt.Println(err)
@@ -50,22 +50,23 @@ func getParentSpan(operationName, traceId string, startIfNoParent bool) (span op
 
 	parentSpanCtx, err := Tracer.Extract(opentracing.TextMap, opentracing.TextMapCarrier{"UBER-TRACE-ID": traceId})
 	if err != nil {
+
 		if startIfNoParent {
 			span = Tracer.StartSpan(operationName)
 		}
 	} else {
-		span = Tracer.StartSpan(operationName, opentracing.ChildOf(parentSpanCtx))
+		span = Tracer.StartSpan(operationName, opentracing.ChildOf(parentSpanCtx), startTime)
 	}
 
 	err = nil
 	return
 }
 
-func StartSpan(operationName, parentSpanTraceId string, startIfNoParent bool) (span opentracing.Span, spanTraceId string, err error) {
+func StartSpan(operationName, parentSpanTraceId string, startIfNoParent bool, startTime opentracing.StartSpanOption) (span opentracing.Span, spanTraceId string, err error) {
 	if Tracer == nil || Closer == nil {
 		return nil, "", errors.New("jaeger tracing error : Tracer or Closer is nil")
 	}
-	plainParentSpan, err := getParentSpan(operationName, parentSpanTraceId, startIfNoParent)
+	plainParentSpan, err := getParentSpan(operationName, parentSpanTraceId, startIfNoParent, startTime)
 	if err != nil || plainParentSpan == nil {
 		fmt.Println("No span return")
 		return

@@ -9,10 +9,12 @@ import (
 	"github.com/gly-hub/go-dandelion/logger"
 	"github.com/gly-hub/go-dandelion/telemetry"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/opentracing/opentracing-go"
 	"github.com/rs/xid"
 	"net/http"
 	"regexp"
 	"runtime"
+	"time"
 )
 
 var ignoreResultPath []string
@@ -41,7 +43,7 @@ func middlewareRequestLink() routing.Handler {
 		jsoniter.Unmarshal(c.PostBody(), &data)
 		body, _ := jsoniter.MarshalToString(data)
 
-		span, spanTraceId, sErr := telemetry.StartSpan(string(c.Method()), traceId, true)
+		span, spanTraceId, sErr := telemetry.StartSpan(string(c.Method()), traceId, true, opentracing.StartTime(time.Now()))
 		if sErr == nil {
 			telemetry.SpanSetTag(span, "url", string(c.RequestURI()))
 			telemetry.SpanSetTag(span, "request_id", traceId)

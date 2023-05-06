@@ -4,7 +4,15 @@ import (
 	"context"
 	"github.com/gly-hub/go-dandelion/logger"
 	"github.com/gly-hub/go-dandelion/telemetry"
+	"github.com/opentracing/opentracing-go"
+	"github.com/petermattis/goid"
 	"github.com/smallnest/rpcx/protocol"
+	"sync"
+	"time"
+)
+
+var (
+	spanMap sync.Map
 )
 
 type ClientLoggerPlugin struct {
@@ -23,14 +31,12 @@ func (p *ServerLoggerPlugin) PreHandleRequest(ctx context.Context, r *protocol.M
 	logger.SetRequestId(r.Metadata["request_id"])
 	traceId := r.Metadata["span_trace_id"]
 	if traceId != "" {
-		span, spanTraceId, err := telemetry.StartSpan("RpcCall", traceId, true)
+		span, spanTraceId, err := telemetry.StartSpan("RpcCall", traceId, true, opentracing.StartTime(time.Now()))
 		if err == nil {
 			telemetry.SpanSetTag(span, "request_id", r.Metadata["request_id"])
 			telemetry.SpanSetTag(span, "call_method", r.ServiceMethod)
 			telemetry.SetSpanTraceId(spanTraceId)
-			defer func() {
-				telemetry.FinishSpan(span)
-			}()
+			spanMap.Store(goid.Get(), span)
 		}
 	}
 
@@ -40,5 +46,8 @@ func (p *ServerLoggerPlugin) PreHandleRequest(ctx context.Context, r *protocol.M
 
 func (p *ServerLoggerPlugin) PostWriteResponse(ctx context.Context, req *protocol.Message, res *protocol.Message, err error) error {
 	logger.DeleteRequestId()
+	if span, ok := spanMap.Load(goid.Get()); ok {
+		telemetry.FinishSpan(span.(opentracing.Span))
+	}
 	return nil
 }

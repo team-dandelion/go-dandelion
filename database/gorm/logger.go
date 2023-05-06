@@ -6,6 +6,8 @@ import (
 	"fmt"
 	loggerx "github.com/gly-hub/go-dandelion/logger"
 	"github.com/gly-hub/go-dandelion/telemetry"
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/log"
 	glogger "gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"
 	"strconv"
@@ -47,14 +49,17 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 	}
 
 	tranceId := telemetry.GetSpanTraceId()
+	var strSql string
+	elapsed := time.Since(begin)
 	if tranceId != nil {
-		span, _, _ := telemetry.StartSpan("GORM", tranceId.(string), false)
+		span, _, _ := telemetry.StartSpan("GORM", tranceId.(string), false, opentracing.StartTime(begin))
 		telemetry.SpanSetTag(span, "request_id", loggerx.GetRequestId())
 		defer func() {
+			span.LogFields(log.String("sql", strSql))
+			span.LogFields(log.String("elapsed", elapsed.String()))
 			telemetry.FinishSpan(span)
 		}()
 	}
-	elapsed := time.Since(begin)
 	switch {
 	case err != nil && logger.Level >= glogger.Error && (!errors.Is(err, glogger.ErrRecordNotFound) || !logger.IgnoreRecordNotFoundError):
 		sql, rows := fc()
@@ -69,6 +74,7 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 			sql,
 			loggerx.Red(err.Error()),
 			utils.FileWithLineNum())
+		strSql = sql
 		loggerx.Info(msg)
 	case elapsed > logger.SlowThreshold && logger.SlowThreshold != 0 && logger.Level >= glogger.Warn:
 		sql, rows := fc()
@@ -84,6 +90,7 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 			loggerx.Blue(fmt.Sprintf("[rows:%v]", rowStr)),
 			sql,
 			utils.FileWithLineNum())
+		strSql = sql
 		loggerx.Info(msg)
 	case logger.Level == glogger.Info:
 		sql, rows := fc()
@@ -96,6 +103,7 @@ func (logger *Logger) Trace(ctx context.Context, begin time.Time, fc func() (str
 		msg := fmt.Sprintf("%v %v",
 			loggerx.Blue(fmt.Sprintf("[gorm] [%.3fms] [rows:%v]", float64(elapsed.Nanoseconds())/1e6, rowStr)),
 			sql)
+		strSql = sql
 		loggerx.Info(msg)
 	}
 }
