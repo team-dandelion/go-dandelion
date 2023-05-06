@@ -23,9 +23,10 @@ func (p *ServerLoggerPlugin) PreHandleRequest(ctx context.Context, r *protocol.M
 	logger.SetRequestId(r.Metadata["request_id"])
 	traceId := r.Metadata["span_trace_id"]
 	if traceId != "" {
-		span, spanTraceId, err := telemetry.StartSpan(r.ServiceMethod, traceId, true)
+		span, spanTraceId, err := telemetry.StartSpan("RpcCall", traceId, true)
 		if err == nil {
 			telemetry.SpanSetTag(span, "request_id", r.Metadata["request_id"])
+			telemetry.SpanSetTag(span, "call_method", r.ServiceMethod)
 			telemetry.SetSpanTraceId(spanTraceId)
 			defer func() {
 				telemetry.FinishSpan(span)
