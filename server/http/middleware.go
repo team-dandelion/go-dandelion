@@ -43,14 +43,16 @@ func middlewareRequestLink() routing.Handler {
 		jsoniter.Unmarshal(c.PostBody(), &data)
 		body, _ := jsoniter.MarshalToString(data)
 
-		span, spanTraceId, sErr := telemetry.StartSpan(string(c.Method()), traceId, true, opentracing.StartTime(time.Now()))
-		if sErr == nil {
-			telemetry.SpanSetTag(span, "url", string(c.RequestURI()))
-			telemetry.SpanSetTag(span, "request_id", traceId)
-			telemetry.SetSpanTraceId(spanTraceId)
-			defer func() {
-				telemetry.FinishSpan(span)
-			}()
+		if string(c.Method()) != "OPTION" {
+			span, spanTraceId, sErr := telemetry.StartSpan(string(c.Method()), traceId, true, opentracing.StartTime(time.Now()))
+			if sErr == nil {
+				telemetry.SpanSetTag(span, "url", string(c.RequestURI()))
+				telemetry.SpanSetTag(span, "request_id", traceId)
+				telemetry.SetSpanTraceId(spanTraceId)
+				defer func() {
+					telemetry.FinishSpan(span)
+				}()
+			}
 		}
 
 		err := c.Next()

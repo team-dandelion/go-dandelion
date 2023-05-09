@@ -15,7 +15,7 @@ type Response struct {
 	Code      int32       `json:"code"`
 	Msg       string      `json:"msg"`
 	Data      interface{} `json:"data"`
-	RequestId interface{} `json:"request_id"`
+	RequestId interface{} `json:"requestId"`
 }
 
 func (hc *HttpController) ReadParams() error {

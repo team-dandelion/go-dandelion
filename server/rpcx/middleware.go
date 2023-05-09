@@ -48,6 +48,7 @@ func (p *ServerLoggerPlugin) PostWriteResponse(ctx context.Context, req *protoco
 	logger.DeleteRequestId()
 	if span, ok := spanMap.Load(goid.Get()); ok {
 		telemetry.FinishSpan(span.(opentracing.Span))
+		spanMap.Delete(goid.Get())
 	}
 	return nil
 }
