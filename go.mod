@@ -6,6 +6,7 @@ require (
 	github.com/FZambia/sentinel v1.1.1
 	github.com/alibaba/sentinel-golang v1.0.4
 	github.com/gly-hub/fasthttp-routing v0.0.0-20230103092213-f65d0ebb75bb
+	github.com/gly-hub/toolbox v0.0.0-20230606092113-55b7564cca88
 	github.com/gomodule/redigo v1.8.9
 	github.com/json-iterator/go v1.1.12
 	github.com/mna/redisc v1.3.2
