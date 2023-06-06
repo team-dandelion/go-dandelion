@@ -5,7 +5,7 @@ import (
 	"github.com/gly-hub/go-dandelion/config"
 	dgorm "github.com/gly-hub/go-dandelion/database/gorm"
 	"github.com/gly-hub/go-dandelion/logger"
-	timex "github.com/gly-hub/go-dandelion/tools/time"
+	timex "github.com/gly-hub/toolbox/time"
 	zedis "github.com/gomodule/redigo/redis"
 	jsoniter "github.com/json-iterator/go"
 	"gorm.io/gorm"

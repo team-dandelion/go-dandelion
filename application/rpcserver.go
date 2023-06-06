@@ -10,8 +10,8 @@ import (
 	"github.com/gly-hub/go-dandelion/server/http"
 	"github.com/gly-hub/go-dandelion/server/rpcx"
 	"github.com/gly-hub/go-dandelion/telemetry"
-	"github.com/gly-hub/go-dandelion/tools/ip"
-	"github.com/gly-hub/go-dandelion/tools/stringx"
+	"github.com/gly-hub/toolbox/ip"
+	"github.com/gly-hub/toolbox/stringx"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/smallnest/rpcx/share"
 	"net"
@@ -90,6 +90,7 @@ func RpcCall(ctx *routing.Context, serverName, funcName string, args interface{}
 	c = context.WithValue(c, share.ReqMetaDataKey, requestHeader)
 	err := rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
 	if err != nil {
+		logger.Error("ServerName: ", serverName, ", FuncName: ", funcName, ", Err: ", err)
 		return &error_support.Error{Code: 5001, Msg: "服务器异常"}
 	}
 
@@ -129,6 +130,7 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 	c = context.WithValue(c, share.ReqMetaDataKey, requestHeader)
 	err := rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
 	if err != nil {
+		logger.Error("ServerName: ", serverName, ", FuncName: ", funcName, ", Err: ", err)
 		return hc.Fail(ctx, &error_support.Error{Code: 5001, Msg: "服务器异常"})
 	}
 
