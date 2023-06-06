@@ -167,5 +167,6 @@ func (r *HttpBuilder) buildStatic() (err error) {
 	}
 
 	myFigure := figure.NewFigure(r.ServerName, "", true)
-	return file.WriteFile(staticTxtFile, myFigure.String())
+	data := myFigure.String()
+	return file.WriteFile(staticTxtFile, data)
 }

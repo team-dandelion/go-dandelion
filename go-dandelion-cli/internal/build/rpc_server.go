@@ -2,6 +2,7 @@ package build
 
 import (
 	"fmt"
+	"github.com/common-nighthawk/go-figure"
 	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/code"
 	"github.com/gly-hub/toolbox/file"
 	"os/exec"
@@ -172,10 +173,13 @@ func (r *RpcBuilder) buildStatic() (err error) {
 	if err = file.CreateDir(staticDir); err != nil {
 		return
 	}
-	bootGoFile := path.Join(staticDir, fmt.Sprintf("%s.txt", r.ServerName))
-	if err = file.CreateFile(bootGoFile); err != nil {
+	staticTxtFile := path.Join(staticDir, fmt.Sprintf("%s.txt", r.ServerName))
+	if err = file.CreateFile(staticTxtFile); err != nil {
 		return
 	}
+	myFigure := figure.NewFigure(r.ServerName, "", true)
+	data := myFigure.String()
+	return file.WriteFile(staticTxtFile, data)
 	return
 }
 
