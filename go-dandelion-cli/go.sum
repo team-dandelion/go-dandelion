@@ -1,3 +1,5 @@
+github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be h1:J5BL2kskAlV9ckgEsNQXscjIaLiOYiZ75d4e94E6dcQ=
+github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be/go.mod h1:mk5IQ+Y0ZeO87b858TlA645sVcEcbiX6YqP98kt+7+w=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/gly-hub/toolbox v0.0.0-20230606070045-93134b426784 h1:Vbm4S1kbxO4L9lJMhYepEhFxm3bYc7bw3aPkayQcswo=
 github.com/gly-hub/toolbox v0.0.0-20230606070045-93134b426784/go.mod h1:+HfT//1beTikSEa/wV9bUqOv2/7GUQ7Yc6C5ixoMhFg=
