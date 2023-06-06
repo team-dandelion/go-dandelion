@@ -1,7 +1,7 @@
 package application
 
 import (
-	"github.com/gly-hub/go-dandelion-cli/internal/build"
+	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/build"
 	"github.com/spf13/cobra"
 )
 

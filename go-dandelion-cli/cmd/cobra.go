@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"errors"
-	"github.com/gly-hub/go-dandelion-cli/cmd/application"
-	"github.com/gly-hub/go-dandelion-cli/cmd/build"
+	"github.com/gly-hub/go-dandelion/go-dandelion-cli/cmd/application"
+	"github.com/gly-hub/go-dandelion/go-dandelion-cli/cmd/build"
 	"github.com/gly-hub/go-dandelion/logger"
 	"github.com/spf13/cobra"
 	"os"
 )
 
 var rootCmd = &cobra.Command{
-	Use:          "github.com/gly-hub/go-dandelion-cli",
+	Use:          "github.com/gly-hub/go-dandelion/go-dandelion-cli",
 	Short:        "go-dandelion-cli",
 	SilenceUsage: true,
 	Long:         "go-dandelion-cli",

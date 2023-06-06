@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gly-hub/go-dandelion-cli/cmd"
+	"github.com/gly-hub/go-dandelion/go-dandelion-cli/cmd"
 )
 
 func main() {

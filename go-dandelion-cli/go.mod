@@ -1,4 +1,4 @@
-module github.com/gly-hub/go-dandelion-cli
+module github.com/gly-hub/go-dandelion/go-dandelion-cli
 
 go 1.20
 

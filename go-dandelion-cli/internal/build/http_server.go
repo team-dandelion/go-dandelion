@@ -2,7 +2,7 @@ package build
 
 import (
 	"fmt"
-	"github.com/gly-hub/go-dandelion-cli/internal/code"
+	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/code"
 	"github.com/gly-hub/toolbox/file"
 	"os/exec"
 	"path"
