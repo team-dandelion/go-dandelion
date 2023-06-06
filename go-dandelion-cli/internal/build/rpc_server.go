@@ -180,7 +180,6 @@ func (r *RpcBuilder) buildStatic() (err error) {
 	myFigure := figure.NewFigure(r.ServerName, "", true)
 	data := myFigure.String()
 	return file.WriteFile(staticTxtFile, data)
-	return
 }
 
 func (r *RpcBuilder) buildInternal() (err error) {
