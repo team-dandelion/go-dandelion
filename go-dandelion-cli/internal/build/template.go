@@ -1,12 +1,17 @@
 package build
 
 import (
+	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/asset"
 	"os"
 	"text/template"
 )
 
 func CreateTemplateFile(filePath, tmplPath string, data any) error {
-	tmpl, err := template.ParseFiles(tmplPath)
+	txtData, err := asset.Asset(tmplPath)
+	if err != nil {
+		return err
+	}
+	tmpl, err := template.New(tmplPath).Parse(string(txtData))
 	if err != nil {
 		return err
 	}
