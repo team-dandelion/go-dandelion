@@ -17,3 +17,7 @@
    cd go-admin-example
    go-dandelion-cli build -n go-admin-example
 ```
+
+#### License
+---
+Apache License, Version 2.0
