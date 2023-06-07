@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/gly-hub/go-dandelion/go-dandelion-cli/cmd/application"
 	"github.com/gly-hub/go-dandelion/go-dandelion-cli/cmd/build"
-	"github.com/gly-hub/go-dandelion/logger"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -16,7 +15,7 @@ var rootCmd = &cobra.Command{
 	Long:         "go-dandelion-cli",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return errors.New(logger.Red("requires at least one arg"))
+			return errors.New("requires at least one arg")
 		}
 		return nil
 	},
