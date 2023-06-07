@@ -3,14 +3,14 @@ package build
 import (
 	"fmt"
 	"github.com/common-nighthawk/go-figure"
-	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/code"
 	"github.com/gly-hub/toolbox/file"
 	"os/exec"
 	"path"
-	"strings"
 )
 
 type RpcTools struct {
+	Http   bool
+	Rpc    bool
 	Logger bool
 	DB     bool
 	Redis  bool
@@ -19,10 +19,11 @@ type RpcTools struct {
 
 // RpcBuilder rpc服务构建器
 type RpcBuilder struct {
-	App        string
-	ServerName string
-	serverDir  string
-	Tools      RpcTools
+	App         string
+	ServerName  string
+	serverDir   string
+	PackageName string
+	Tools       RpcTools
 }
 
 // BuildRpcServer 构建rpc服务
@@ -69,24 +70,23 @@ func (r *RpcBuilder) buildBoot() (err error) {
 		return
 	}
 	bootGoFile := path.Join(bootDir, "boot.go")
-	if err = file.CreateFile(bootGoFile); err != nil {
+	if err = CreateTemplateFile(bootGoFile, "internal/template/boot/boot.tmpl", r); err != nil {
+		fmt.Println(err.Error())
 		return
 	}
-	err = file.WriteFile(bootGoFile, code.Boot())
 	return
 }
 
 func (r *RpcBuilder) buildCmd() (err error) {
 	cmdDir := path.Join(r.serverDir, "cmd")
-	// 创建应用文件夹
 	if err = file.CreateDir(cmdDir); err != nil {
-		return
+		return err
 	}
+
 	bootGoFile := path.Join(cmdDir, "cobra.go")
-	if err = file.CreateFile(bootGoFile); err != nil {
+	if err = CreateTemplateFile(bootGoFile, "internal/template/cmd/cobra.tmpl", r); err != nil {
 		return
 	}
-	_ = file.WriteFile(bootGoFile, code.CmdCobra(r.App, r.ServerName))
 
 	apiDir := path.Join(cmdDir, "api")
 	// 创建应用文件夹
@@ -94,10 +94,10 @@ func (r *RpcBuilder) buildCmd() (err error) {
 		return
 	}
 	serverFile := path.Join(apiDir, "server.go")
-	if err = file.CreateFile(serverFile); err != nil {
+
+	if err = CreateTemplateFile(serverFile, "internal/template/cmd/rpcserver.tmpl", r); err != nil {
 		return
 	}
-	_ = file.WriteFile(serverFile, code.CmdRpc(r.App, r.ServerName))
 
 	return nil
 }
@@ -109,29 +109,11 @@ func (r *RpcBuilder) buildConfig() (err error) {
 		return
 	}
 	configYamlFile := path.Join(configDir, "configs_local.yaml")
-	if err = file.CreateFile(configYamlFile); err != nil {
+	if err = CreateTemplateFile(configYamlFile, "internal/template/config/config.tmpl", r); err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 
-	var configText []string
-	configText = append(configText, code.ConfigYamlRpcServer(r.App, r.ServerName))
-	if r.Tools.DB {
-		configText = append(configText, code.ConfigYamlDB())
-	}
-
-	if r.Tools.Logger {
-		configText = append(configText, code.ConfigYamlLogger())
-	}
-
-	if r.Tools.Redis {
-		configText = append(configText, code.ConfigYamlRedis())
-	}
-
-	if r.Tools.Trace {
-		configText = append(configText, code.ConfigYamlTrace())
-	}
-
-	err = file.WriteFile(configYamlFile, strings.Join(configText, "\r\n"))
 	return
 }
 
@@ -142,10 +124,9 @@ func (r *RpcBuilder) buildGlobal() (err error) {
 		return
 	}
 	globalGoFile := path.Join(globalDir, "global.go")
-	if err = file.CreateFile(globalGoFile); err != nil {
+	if err = CreateTemplateFile(globalGoFile, "internal/template/global/global.tmpl", r); err != nil {
 		return
 	}
-	err = file.WriteFile(globalGoFile, code.Global())
 	return
 }
 
@@ -160,10 +141,9 @@ func (r *RpcBuilder) buildTools() (err error) {
 
 func (r *RpcBuilder) buildMain() (err error) {
 	mainGoFile := path.Join(r.serverDir, "main.go")
-	if err = file.CreateFile(mainGoFile); err != nil {
+	if err = CreateTemplateFile(mainGoFile, "internal/template/main.tmpl", r); err != nil {
 		return
 	}
-	err = file.WriteFile(mainGoFile, code.Main(r.App, r.ServerName))
 	return
 }
 
@@ -215,10 +195,8 @@ func (r *RpcBuilder) buildInternal() (err error) {
 		return
 	}
 	apiGoFile := path.Join(serviceDir, "api.go")
-	if err = file.CreateFile(apiGoFile); err != nil {
+	if err = CreateTemplateFile(apiGoFile, "internal/template/internal/rpcapi.tmpl", r); err != nil {
 		return
 	}
-
-	err = file.WriteFile(apiGoFile, code.ServiceApi())
 	return
 }

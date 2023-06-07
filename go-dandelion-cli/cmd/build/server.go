@@ -55,6 +55,8 @@ func rpc() error {
 		return nil
 	}
 	var rpcBuilder build.RpcBuilder
+	rpcBuilder.Tools.Rpc = true
+	rpcBuilder.PackageName = fmt.Sprintf("%s/%s", appName, serverName)
 	rpcBuilder.App = appName
 	rpcBuilder.ServerName = serverName
 	fmt.Print("是否初始化mysql（y/n）:")
@@ -109,6 +111,8 @@ func http() error {
 		return nil
 	}
 	var httpBuilder build.HttpBuilder
+	httpBuilder.Tools.Http = true
+	httpBuilder.PackageName = fmt.Sprintf("%s/%s", appName, serverName)
 	httpBuilder.App = appName
 	httpBuilder.ServerName = serverName
 	fmt.Print("是否初始化mysql（y/n）:")

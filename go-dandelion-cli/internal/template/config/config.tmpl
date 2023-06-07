@@ -1,12 +1,5 @@
-package code
-
-import "fmt"
-
-// 配置相关代码
-
-// ConfigYamlLogger 配置yaml日志
-func ConfigYamlLogger() string {
-	return `logger:
+{{ if .Tools.Logger }}
+logger:
   #Level 0 紧急的 1警报 2重要的 3错误 4警告 5提示 6信息 7调试
   consoleShow: true
   consoleLevel:  7
@@ -14,41 +7,24 @@ func ConfigYamlLogger() string {
   fileLevel:  7
   multiFileWrite: false
   multiFileLevel: 7
-`
-}
+{{ end }}
 
-func ConfigYamlHttpServer() string {
-	return `httpServer:
+{{ if .Tools.Http }}httpServer:
   port: 8080
-  pprof: 8088`
-}
+  pprof: 8088
+{{ end }}
 
-// ConfigYamlRpcServer 配置yaml rpc
-func ConfigYamlRpcServer(app, server string) string {
-	return fmt.Sprintf(`rpcServer:
+rpcServer:
   model: 1
-  serverName: "%s"
+  serverName: "{{ .ServerName }}"
   etcd: ["127.0.0.1:2379"]
-  basePath: "%s"
-  addr: ""
+  basePath: "{{ .App }}"
+{{if .Tools.Rpc}}  addr: ""
   port: 8899
   pprof: 18899
-`, server, app)
-}
+{{end}}
 
-// ConfigYamlRpcServerForHttp 配置yaml rpc
-func ConfigYamlRpcServerForHttp(app, server string) string {
-	return fmt.Sprintf(`rpcServer:
-  model: 1
-  serverName: "%s"
-  etcd: ["127.0.0.1:2379"]
-  basePath: "%s"
-`, server, app)
-}
-
-// ConfigYamlDB 配置yaml db
-func ConfigYamlDB() string {
-	return `db:
+{{if .Tools.DB}}db:
   dbType: "mysql"
   maxOpenConn: 20
   maxIdleConn: 4
@@ -68,12 +44,10 @@ func ConfigYamlDB() string {
       host: "127.0.0.1"
       port: "3306"
       database: "database"
-`
-}
+{{end}}
 
-// ConfigYamlRedis 配置yaml redis
-func ConfigYamlRedis() string {
-	return `redis:
+{{if .Tools.Redis}}
+redis:
   redisType: "alone"
   network: "127.0.0.1:6379"
   startAddr: ["127.0.0.1:6379"]
@@ -84,14 +58,11 @@ func ConfigYamlRedis() string {
   readTimeout: "100ms"
   writeTimeout: "100ms"
   idleTimeout: "100ms"
-`
-}
+{{end}}
 
-// ConfigYamlTrace 配置yaml trace
-func ConfigYamlTrace() string {
-	return `tracer:
+{{if .Tools.Trace}}
+tracer:
   openTrace: true
   traceName: "serverName"
   host: "127.0.0.1:6831"
-`
-}
+{{end}}

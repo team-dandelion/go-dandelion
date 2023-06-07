@@ -1,19 +1,4 @@
-package code
-
-import (
-	"fmt"
-)
-
-func ServiceApi() string {
-	return `package service
-
-type RpcApi struct {
-
-}`
-}
-
-func Route() string {
-	return fmt.Sprintf(`package route
+package route
 
 import (
 	"github.com/gly-hub/go-dandelion/application"
@@ -31,6 +16,6 @@ func InitRoute() {
 	}
 
 	// 可在该处注册相关子集路由 TODO
-}
-`)
+
+	return
 }
