@@ -57,7 +57,7 @@ func run() error {
 	go func() {
 		application.HttpServer().Server()
 	}()
-	content, _ := ioutil.ReadFile("./static/internal-gateway.txt")
+	content, _ := ioutil.ReadFile("./static/{{ .ServerName }}.txt")
 	fmt.Println(logger.Green(string(content)))
     fmt.Println(logger.Green("Server run at:"))
     fmt.Printf("-  Local:   http://localhost:%d/ \r\n", application.HttpServer().Port())

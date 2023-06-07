@@ -48,7 +48,7 @@ func run() error {
 	go func() {
 		application.RpcServer(new(service.RpcApi))
 	}()
-	content, _ := ioutil.ReadFile("./static/%s.txt")
+	content, _ := ioutil.ReadFile("./static/{{ .ServerName }}.txt")
 	fmt.Println(logger.Green(string(content)))
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
