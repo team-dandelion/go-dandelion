@@ -2,8 +2,8 @@
 
 ### 1.安装
 ```
-    go get github.com/gly-hub/go-dandelion/go-dandelion-cli
-    go install github.com/gly-hub/go-dandelion/go-dandelion-cli
+    go get github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
+    go install github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
 ```
 
 #### 创建项目
