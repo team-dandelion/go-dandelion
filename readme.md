@@ -3,7 +3,7 @@
 go-dandelion项目意在通过集成相关组件，方便开发者快速构建项目框架，提升开发效率。不在浪费时间在各组组件的集成上，可快速进行业务开发。
 
 **集成**
-+ <a herf="https://github.com/smallnest/rpcx">rpcx</a>
++ [rpc](https://github.com/smallnest/rpcx)
 + <a herf="https://github.com/valyala/fasthttp">fasthttp</a>
 + <a herf="https://github.com/qiangxue/fasthttp-routing">fasthttp-routing</a>
 + <a herf="https://github.com/go-gorm/gorm">gorm</a>
