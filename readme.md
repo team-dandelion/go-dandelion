@@ -31,14 +31,21 @@ go-dandelion-cli app -n go-admin-example
 cd go-admin-example
 # 构建服务
 go-dandelion-cli build -n go-admin-example
+需要创建的服务类型，输入数字（1-rpc 2-http）:1
+rpc服务名称:example-server
+是否初始化mysql（y/n）:y
+是否初始化redis（y/n）:y
+是否初始化logger（y/n）:y
+是否初始化trace链路（y/n）:y
 ```
 
 ### 3.运行项目
 ```shell
+cd example-server
 #进入服务目录
-go build -o 服务名称
+go build -o example-server
 #运行
-./服务名称 server
+./example-server server
 ```
 
 ## 🔥贡献者
