@@ -13,7 +13,12 @@ type Plugin interface {
 	InitPlugin() error
 }
 
-func Plugs(plugin Plugin) error {
-	config.LoadCustomConfig(plugin.Config)
-	return plugin.InitPlugin()
+func Plugs(plugins ...Plugin) error {
+	for _, plug := range plugins {
+		config.LoadCustomConfig(plug.Config)
+		if err := plug.InitPlugin(); err != nil {
+			return err
+		}
+	}
+	return nil
 }

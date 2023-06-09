@@ -71,10 +71,10 @@ func (client *AppDB) Listener() {
 		msg := ParseChangeData(device)
 		switch msg.ChangeType {
 		case Created:
-			_ = client.Connetion(msg.AppKey)
+			_ = client.Connection(msg.AppKey)
 			_ = client.appChangeFunc(msg.AppKey, msg.ChangeType)
 		case Updated:
-			_ = client.Connetion(msg.AppKey)
+			_ = client.Connection(msg.AppKey)
 			_ = client.appChangeFunc(msg.AppKey, msg.ChangeType)
 		case Deleted:
 			client.db.Delete(msg.AppKey)
@@ -83,7 +83,7 @@ func (client *AppDB) Listener() {
 	//go tools.PSubscribeListen(client.redis)
 }
 
-func (client *AppDB) Connetion(appKey string) error {
+func (client *AppDB) Connection(appKey string) error {
 	if appKey == "" {
 		return nil
 	}

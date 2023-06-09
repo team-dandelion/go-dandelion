@@ -1,9 +1,9 @@
 [![Security Status](https://www.murphysec.com/platform3/v31/badge/1666706410635550720.svg)](https://www.murphysec.com/console/report/1666706410597801984/1666706410635550720)
-## 关于go-dandelion
+## 📚关于go-dandelion
 go-dandelion项目意在通过集成相关组件，方便开发者快速构建项目框架，提升开发效率。不在浪费时间在各组组件的集成上，可快速进行业务开发。
 
 **集成**
-+ [rpc](https://github.com/smallnest/rpcx)
++ [rpcx](https://github.com/smallnest/rpcx)
 + [fasthttp](https://github.com/valyala/fasthttp)
 + [fasthttp-routing](https://github.com/qiangxue/fasthttp-routing)
 + [gorm](https://github.com/go-gorm/gorm)
@@ -13,8 +13,13 @@ go-dandelion项目意在通过集成相关组件，方便开发者快速构建�
 + [viper](https://github.com/spf13/viper)
 + [opentracing-go](https://github.com/opentracing/opentracing-go)
 
+**功能**
++ 快速创建rpc服务、http服务
++ 通过配置，快速初始化mysql、redis、logger、trace链路等
++ 集成日志打印、链路追踪、限流、熔断、服务注册、服务发现等功能
++ 可自定义中间件、插件
 
-## go-dandelion-cli使用
+## 🖥go-dandelion-cli使用
 
 ### 1.安装
 ```
