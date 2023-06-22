@@ -63,6 +63,6 @@ redis:
 {{if .Tools.Trace}}
 tracer:
   openTrace: true
-  traceName: "serverName"
+  traceName: "{{ .ServerName }}"
   host: "127.0.0.1:6831"
 {{end}}

@@ -42,7 +42,7 @@ var Conf Config
 
 type Config struct {
 	DB         *DB         `json:"db" yaml:"db"`
-	Redis      *Redis      `json:"redis-plus" yaml:"redis-plus"`
+	Redis      *Redis      `json:"redis" yaml:"redis"`
 	Logger     *Logger     `json:"logger" yaml:"logger"`
 	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
 	RpcServer  *RpcServer  `json:"rpc_server" yaml:"rpcServer"`
