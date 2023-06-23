@@ -1,4 +1,4 @@
-中文|[英文](readme-EN.md)
+中文|[English](readme-EN.md)
 
 [![Security Status](https://www.murphysec.com/platform3/v31/badge/1666706410635550720.svg)](https://www.murphysec.com/console/report/1666706410597801984/1666706410635550720)
 ## 📚关于go-dandelion
