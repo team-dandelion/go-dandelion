@@ -10,12 +10,13 @@ import (
 
 // 构建网关服务
 type HttpTools struct {
-	Http   bool
-	Rpc    bool
-	Logger bool
-	DB     bool
-	Redis  bool
-	Trace  bool
+	Http      bool
+	RpcServer bool
+	RpcClient bool
+	Logger    bool
+	DB        bool
+	Redis     bool
+	Trace     bool
 }
 
 // HttpBuilder http服务构建器

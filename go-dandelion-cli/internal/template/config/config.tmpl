@@ -14,17 +14,32 @@ logger:
   pprof: 8088
 {{ end }}
 
-rpcServer:
-  model: 1
-  serverName: "{{ .ServerName }}"
-  etcd: ["127.0.0.1:2379"]
+{{if .Tools.RpcClient}}
+rpcClient:
+  clientName: "{{ .ServerName }}"
   basePath: "{{ .App }}"
-{{if .Tools.Rpc}}  addr: ""
+  registerPlugin: "etcd"
+  registerServers:
+    - "127.0.0.1:2379"
+  failRetryModel: 3
+  balanceModel: 2
+  poolSize: 1
+{{end}}
+
+{{if .Tools.RpcServer}}
+rpcServer:
+  serverName: "{{ .ServerName }}"
+  registerPlugin: "etcd"
+  registerServers:
+    - "127.0.0.1:2379"
+  basePath: "{{ .App }}"
+  addr: ""
   port: 8899
   pprof: 18899
 {{end}}
 
-{{if .Tools.DB}}db:
+{{if .Tools.DB}}
+db:
   dbType: "mysql"
   maxOpenConn: 20
   maxIdleConn: 4

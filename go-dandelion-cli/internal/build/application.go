@@ -31,7 +31,7 @@ func Rpc(appName string) error {
 		return nil
 	}
 	var rpcBuilder RpcBuilder
-	rpcBuilder.Tools.Rpc = true
+	rpcBuilder.Tools.RpcServer = true
 	rpcBuilder.PackageName = fmt.Sprintf("%s/%s", appName, serverName)
 	rpcBuilder.App = appName
 	rpcBuilder.ServerName = serverName
@@ -70,6 +70,7 @@ func Http(appName string) error {
 	}
 	var httpBuilder HttpBuilder
 	httpBuilder.Tools.Http = true
+	httpBuilder.Tools.RpcClient = true
 	httpBuilder.PackageName = fmt.Sprintf("%s/%s", appName, serverName)
 	httpBuilder.App = appName
 	httpBuilder.ServerName = serverName

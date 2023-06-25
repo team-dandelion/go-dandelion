@@ -9,12 +9,13 @@ import (
 )
 
 type RpcTools struct {
-	Http   bool
-	Rpc    bool
-	Logger bool
-	DB     bool
-	Redis  bool
-	Trace  bool
+	Http      bool
+	RpcServer bool
+	RpcClient bool
+	Logger    bool
+	DB        bool
+	Redis     bool
+	Trace     bool
 }
 
 // RpcBuilder rpc服务构建器
