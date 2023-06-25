@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/build"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 var (
@@ -31,130 +30,18 @@ func setup() {
 }
 
 func run() error {
-	fmt.Print("需要创建的服务类型，输入数字（1-rpc 2-http）:")
+	fmt.Print("Type of service you want to create, enter a number（1-rpc 2-http）:")
 	var serverType int
 	if _, err := fmt.Scanln(&serverType); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
+		fmt.Println("An error occurred while reading the input:", err)
 		return nil
 	}
 	switch serverType {
 	case 1:
-		return rpc()
+		return build.Rpc(appName)
 	case 2:
-		return http()
+		return build.Http(appName)
 	}
 
-	return nil
-}
-
-func rpc() error {
-	var serverName string
-	fmt.Print("rpc服务名称:")
-	if _, err := fmt.Scanln(&serverName); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	var rpcBuilder build.RpcBuilder
-	rpcBuilder.Tools.Rpc = true
-	rpcBuilder.PackageName = fmt.Sprintf("%s/%s", appName, serverName)
-	rpcBuilder.App = appName
-	rpcBuilder.ServerName = serverName
-	fmt.Print("是否初始化mysql（y/n）:")
-	var need string
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		rpcBuilder.Tools.DB = true
-	}
-
-	fmt.Print("是否初始化redis（y/n）:")
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		rpcBuilder.Tools.Redis = true
-	}
-
-	fmt.Print("是否初始化logger（y/n）:")
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		rpcBuilder.Tools.Logger = true
-	}
-
-	fmt.Print("是否初始化trace链路（y/n）:")
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		rpcBuilder.Tools.Trace = true
-	}
-	rpcBuilder.BuildRpcServer()
-	return nil
-}
-
-func http() error {
-	var serverName string
-	fmt.Print("http服务名称:")
-	if _, err := fmt.Scanln(&serverName); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	var httpBuilder build.HttpBuilder
-	httpBuilder.Tools.Http = true
-	httpBuilder.PackageName = fmt.Sprintf("%s/%s", appName, serverName)
-	httpBuilder.App = appName
-	httpBuilder.ServerName = serverName
-	fmt.Print("是否初始化mysql（y/n）:")
-	var need string
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		httpBuilder.Tools.DB = true
-	}
-
-	fmt.Print("是否初始化redis（y/n）:")
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		httpBuilder.Tools.Redis = true
-	}
-
-	fmt.Print("是否初始化logger（y/n）:")
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		httpBuilder.Tools.Logger = true
-	}
-
-	fmt.Print("是否初始化trace链路（y/n）:")
-	if _, err := fmt.Scanln(&need); err != nil {
-		fmt.Println("读取输入时发生错误:", err)
-		return nil
-	}
-	need = strings.ToLower(need)
-	if need == "y" || need == "yes" {
-		httpBuilder.Tools.Trace = true
-	}
-	httpBuilder.BuildHttpServer()
 	return nil
 }
