@@ -13,7 +13,6 @@ import (
 	"github.com/gly-hub/toolbox/ip"
 	"github.com/gly-hub/toolbox/stringx"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/smallnest/rpcx/share"
 	"net"
 	httpx "net/http"
 	_ "net/http/pprof"
@@ -21,58 +20,48 @@ import (
 	"strconv"
 )
 
-var rpc *rpcServer
+var (
+	rpcServer *rpcx.Server
+	rpcClient *RpcClient
+)
 
-type rpcServer struct {
-	ServerName string
-	BasePath   string
-	Etcd       []string
-	Addr       string
-	Port       int
-	server     *rpcx.RPCxServer
-	client     *rpcx.RPCXClient
+type RpcClient struct {
+	ClientName string
+	clientPool *rpcx.ClientPool
 	headerFunc func(ctx *routing.Context, header map[string]string) map[string]string
 }
 
-func initRpcServer() {
-	if config.Conf.RpcServer == nil && config.Conf.RpcServer.Etcd != nil {
+func initRpcClient() {
+	if config.Conf.RpcClient == nil {
 		return
 	}
-	rpc = &rpcServer{
-		ServerName: config.Conf.RpcServer.ServerName,
-		BasePath:   config.Conf.RpcServer.BasePath,
-		Etcd:       config.Conf.RpcServer.Etcd,
-		Addr:       config.Conf.RpcServer.Addr,
-		Port:       config.Conf.RpcServer.Port,
+	client, err := rpcx.NewRPCClient(rpcx.ClientConfig{
+		ClientName:      config.Conf.RpcClient.ClientName,
+		BasePath:        config.Conf.RpcClient.BasePath,
+		RegisterPlugin:  rpcx.RegisterPluginType(config.Conf.RpcClient.RegisterPlugin),
+		RegisterServers: config.Conf.RpcClient.RegisterServers,
+		FailRetryModel:  rpcx.FailRetryModel(config.Conf.RpcClient.FailRetryModel),
+		BalanceModel:    rpcx.BalanceModel(config.Conf.RpcClient.BalanceModel),
+		PoolSize:        config.Conf.RpcClient.PoolSize,
+	})
+	if err != nil {
+		panic(err)
 	}
-	rpcx.SetBase(rpc.BasePath, rpc.Etcd)
-	if config.Conf.RpcServer.Model != 0 {
-		rpc.client = rpcx.NewRPCXClient(config.Conf.RpcServer.Model)
-	}
-	if config.Conf.RpcServer.Pprof != 0 {
-		go func() {
-			listener, _ := net.Listen("tcp", net.JoinHostPort("", strconv.Itoa(config.Conf.RpcServer.Pprof)))
-			_ = httpx.Serve(listener, nil)
-		}()
+	rpcClient = &RpcClient{
+		ClientName: config.Conf.RpcClient.ClientName,
+		clientPool: client,
 	}
 }
 
-func GetHeader(ctx context.Context, key string) string {
-	data := ctx.Value(share.ReqMetaDataKey).(map[string]string)
-	return data[key]
-}
-
-func RegisterHeaderFunc(fun func(ctx *routing.Context, header map[string]string) map[string]string) {
-	rpc.headerFunc = fun
+func RegisterHeaderFunc(f func(ctx *routing.Context, header map[string]string) map[string]string) {
+	rpcClient.headerFunc = f
 }
 
 // RpcCall rpc请求
 func RpcCall(ctx *routing.Context, serverName, funcName string, args interface{}, reply interface{}) error {
-	if rpc.client == nil {
+	if rpcClient.clientPool == nil {
 		panic("请配置rpcx参数")
 	}
-	var c = context.Background()
-
 	content, _ := jsoniter.MarshalToString(args)
 	var traceId string
 	if telemetry.GetSpanTraceId() != nil {
@@ -81,14 +70,13 @@ func RpcCall(ctx *routing.Context, serverName, funcName string, args interface{}
 	requestHeader := map[string]string{
 		"request_id":    stringx.Strval(logger.GetRequestId()),
 		"span_trace_id": traceId,
-		"client_name":   rpc.ServerName,
+		"client_name":   rpcClient.ClientName,
 		"content":       content,
 	}
 
-	requestHeader = rpc.headerFunc(ctx, requestHeader)
-
-	c = context.WithValue(c, share.ReqMetaDataKey, requestHeader)
-	err := rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
+	requestHeader = rpcClient.headerFunc(ctx, requestHeader)
+	c := rpcx.Header().Set(context.Background(), requestHeader)
+	err := rpcClient.clientPool.Client().Call(c, serverName, funcName, args, reply)
 	if err != nil {
 		logger.Error("ServerName: ", serverName, ", FuncName: ", funcName, ", Err: ", err)
 		return &error_support.Error{Code: 5001, Msg: "服务器异常"}
@@ -106,7 +94,7 @@ func RpcCall(ctx *routing.Context, serverName, funcName string, args interface{}
 
 // SRpcCall rpc请求拓展
 func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{}, reply interface{}) error {
-	if rpc.client == nil {
+	if rpcClient.clientPool == nil {
 		panic("请配置rpcx参数")
 	}
 	var hc http.HttpController
@@ -122,13 +110,12 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 	requestHeader := map[string]string{
 		"request_id":    stringx.Strval(logger.GetRequestId()),
 		"span_trace_id": traceId,
-		"client_name":   rpc.ServerName,
+		"client_name":   rpcClient.ClientName,
 		"content":       content,
 	}
-	requestHeader = rpc.headerFunc(ctx, requestHeader)
-	c := context.Background()
-	c = context.WithValue(c, share.ReqMetaDataKey, requestHeader)
-	err := rpc.client.GetClient().Call(c, serverName, funcName, args, reply)
+	requestHeader = rpcClient.headerFunc(ctx, requestHeader)
+	c := rpcx.Header().Set(context.Background(), requestHeader)
+	err := rpcClient.clientPool.Client().Call(c, serverName, funcName, args, reply)
 	if err != nil {
 		logger.Error("ServerName: ", serverName, ", FuncName: ", funcName, ", Err: ", err)
 		return hc.Fail(ctx, &error_support.Error{Code: 5001, Msg: "服务器异常"})
@@ -145,20 +132,39 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 	return hc.Success(ctx, reply, rv.FieldByName("Msg").String())
 }
 
-func RpcServer(handler interface{}, auth ...rpcx.AuthCall) {
-	if rpc == nil {
-		panic("请配置rpcx参数")
+func RpcServer(handler interface{}, auth ...rpcx.AuthFunc) {
+	if config.Conf.RpcServer == nil || config.Conf.RpcServer.ServerName == "" ||
+		config.Conf.RpcServer.Port == 0 || config.Conf.RpcServer.RegisterServers == nil {
+		logger.Error("请检查rpc服务配置")
+		panic("请检查rpc服务配置")
 	}
 
 	var addr string
-	if rpc.Addr != "" {
-		addr = rpc.Addr
+	if config.Conf.RpcServer.Addr != "" {
+		addr = config.Conf.RpcServer.Addr
 	} else {
 		addr = ip.GetLocalHost()
 	}
-	rpc.server = rpcx.NewRpcxServer(rpc.ServerName, fmt.Sprintf("%s:%d", addr, rpc.Port), handler)
-	if len(auth) > 0 {
-		rpc.server.SetAuthCall(auth[0])
+	var err error
+	rpcServer, err = rpcx.NewRPCServer(rpcx.ServerConfig{
+		ServerName:      config.Conf.RpcServer.ServerName,
+		Addr:            fmt.Sprintf("%s:%d", addr, config.Conf.RpcServer.Port),
+		BasePath:        config.Conf.RpcServer.BasePath,
+		RegisterPlugin:  rpcx.RegisterPluginType(config.Conf.RpcServer.RegisterPlugin),
+		RegisterServers: config.Conf.RpcServer.RegisterServers,
+		Handle:          handler,
+	})
+	if err != nil {
+		panic(err)
 	}
-	rpc.server.Start()
+	if len(auth) > 0 {
+		rpcServer.RegisterAuthFunc(auth[0])
+	}
+	if config.Conf.RpcServer.Pprof != 0 {
+		go func() {
+			listener, _ := net.Listen("tcp", net.JoinHostPort("", strconv.Itoa(config.Conf.RpcServer.Pprof)))
+			_ = httpx.Serve(listener, nil)
+		}()
+	}
+	rpcServer.Start()
 }

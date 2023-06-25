@@ -6,11 +6,21 @@ type HttpServer struct {
 }
 
 type RpcServer struct {
-	ServerName string   `json:"server_name" yaml:"serverName"`
-	BasePath   string   `json:"base_path" yaml:"basePath"`
-	Etcd       []string `json:"etcd" yaml:"etcd"`
-	Addr       string   `json:"addr" yaml:"addr"`
-	Port       int      `json:"port" yaml:"port"`
-	Model      int      `json:"model" yaml:"model"`
-	Pprof      int      `json:"pprof" yaml:"pprof"`
+	ServerName      string   `json:"server_name" yaml:"serverName"`
+	BasePath        string   `json:"base_path" yaml:"basePath"`
+	RegisterPlugin  string   `json:"register_plugin" yaml:"registerPlugin"`
+	RegisterServers []string `json:"register_servers" yaml:"registerServers"`
+	Addr            string   `json:"addr" yaml:"addr"`
+	Port            int      `json:"port" yaml:"port"`
+	Pprof           int      `json:"pprof" yaml:"pprof"`
+}
+
+type RpcClient struct {
+	ClientName      string   `json:"client_name" yaml:"clientName"`
+	BasePath        string   `json:"base_path" yaml:"basePath"`
+	RegisterPlugin  string   `json:"register_plugin" yaml:"registerPlugin"`
+	RegisterServers []string `json:"register_servers" yaml:"registerServers"`
+	FailRetryModel  int      `json:"fail_retry_model" yaml:"failRetryModel"`
+	BalanceModel    int      `json:"balance_model" yaml:"balanceModel"`
+	PoolSize        int      `json:"pool_size" yaml:"poolSize"`
 }

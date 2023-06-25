@@ -16,8 +16,8 @@ func Init() {
 	// 初始化错误文本
 	//error_support.Init(".")
 
-	// 初始化Rpc
-	initRpcServer()
+	// 初始化Rpc Client
+	initRpcClient()
 
 	// 初始化链路追踪
 	initTracer()

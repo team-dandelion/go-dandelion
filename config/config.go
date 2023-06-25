@@ -46,6 +46,7 @@ type Config struct {
 	Logger     *Logger     `json:"logger" yaml:"logger"`
 	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
 	RpcServer  *RpcServer  `json:"rpc_server" yaml:"rpcServer"`
+	RpcClient  *RpcClient  `json:"rpc_client" yaml:"rpcClient"`
 	Tracer     *Tracer     `json:"tracer" yaml:"tracer"`
 }
 
