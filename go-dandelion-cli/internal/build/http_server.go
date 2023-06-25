@@ -91,7 +91,7 @@ func (r *HttpBuilder) buildConfig() (err error) {
 		return
 	}
 	configYamlFile := path.Join(configDir, "configs_local.yaml")
-	if err = CreateTemplateFile(configYamlFile, "internal/template/config/configs_local.tmpl", r); err != nil {
+	if err = CreateTemplateFile(configYamlFile, "internal/template/config/config.tmpl", r); err != nil {
 		return
 	}
 
