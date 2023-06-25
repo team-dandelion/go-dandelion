@@ -1,10 +1,11 @@
-中文|[英文](readme-EN.md)
+[中文](readme-ZH.md)|英文
 
 [![Security Status](https://www.murphysec.com/platform3/v31/badge/1666706410635550720.svg)](https://www.murphysec.com/console/report/1666706410597801984/1666706410635550720)
-## 📚关于go-dandelion
-go-dandelion项目意在通过集成相关组件，方便开发者快速构建项目框架，提升开发效率。不在浪费时间在各组组件的集成上，可快速进行业务开发。
+## About go-dandelion
 
-**集成**
+The go-dandelion project aims to provide developers with a project framework that integrates various components, making it easy to build projects and improve development efficiency. It eliminates the need to spend time on integrating different components, allowing developers to focus on business development.
+
+**Integration**
 + [rpcx](https://github.com/smallnest/rpcx)
 + [fasthttp](https://github.com/valyala/fasthttp)
 + [fasthttp-routing](https://github.com/qiangxue/fasthttp-routing)
@@ -15,55 +16,54 @@ go-dandelion项目意在通过集成相关组件，方便开发者快速构建�
 + [viper](https://github.com/spf13/viper)
 + [opentracing-go](https://github.com/opentracing/opentracing-go)
 
-**功能**
-+ 快速创建rpc服务、http服务
-+ 通过配置，快速初始化mysql、redis、logger、trace链路等
-+ 集成日志打印、链路追踪、限流、熔断、服务注册、服务发现等功能
-+ 可自定义中间件、插件
+**Features**
++ Quickly create RPC services and HTTP services.
++ Initialize MySQL, Redis, logger, and trace links quickly through configuration.
++ Integrated logging, distributed tracing, rate limiting, circuit breaking, service registration, service discovery, and other features.
++ Customizable middleware and plugins.
 
-## 🖥go-dandelion-cli使用
+## go-dandelion-cli Usage
 
-### 1.安装
+## 1. Installation
 ```
 go get github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
 go install github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
 ```
 
-### 2.创建项目
-创建本地项目目录，根据提示创建对应项目
+## 2. Create a Project
+Create a local project directory and create the corresponding project based on the prompts.
 ```shell
-# 创建应用
+# Create an application
 go-dandelion-cli app -n go-admin-example
-# 进入应用目录
+# Enter the application directory
 cd go-admin-example
-# 构建服务
+# Build the service
 go-dandelion-cli build -n go-admin-example
-需要创建的服务类型，输入数字（1-rpc 2-http）:1
-rpc服务名称:example-server
-是否初始化mysql（y/n）:y
-是否初始化redis（y/n）:y
-是否初始化logger（y/n）:y
-是否初始化trace链路（y/n）:y
+Enter the type of service to create, enter a number (1 for rpc, 2 for http): 1
+RPC service name: example-server
+Initialize MySQL (y/n): y
+Initialize Redis (y/n): y
+Initialize logger (y/n): y
+Initialize trace links (y/n): y
 ```
 
-### 3.运行项目
+## 3. Run the Project
 ```shell
 cd example-server
-#进入服务目录
+# Enter the service directory
 go build -o example-server
-#运行
+# Run the service
 ./example-server server
 ```
 
-## 🔥贡献者
+## 🔥Contributors
 
 <a href="https://github.com/gly-hub/go-dandelion/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=gly-hub/go-dandelion" />
 </a>
 
-##  ⭐点个star吧！
+## ⭐ Star the project
+if you find it interesting!
 
-如果你对该项目感兴趣，请点个星哦！
-
-## 🔑开源
+## Open Source
 [Apache License, Version 2.0](LICENSE.txt)
