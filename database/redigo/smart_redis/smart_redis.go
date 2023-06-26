@@ -11,8 +11,7 @@ import (
 )
 
 type Config struct {
-	RedisType    string //cluster,alone,sentinel
-	Network      string
+	RedisType    string   //cluster,alone,sentinel
 	StartAddr    []string // Startup nodes
 	Active       int
 	Idle         int

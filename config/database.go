@@ -30,7 +30,6 @@ type Slave struct {
 
 type Redis struct {
 	RedisType    string   `json:"redis_type" yaml:"redisType"` //cluster,alone,sentinel
-	Network      string   `json:"network" yaml:"network"`
 	StartAddr    []string `json:"start_addr" yaml:"startAddr"` // Startup nodes
 	Active       int      `json:"active" yaml:"active"`
 	Idle         int      `json:"idle" yaml:"idle"`

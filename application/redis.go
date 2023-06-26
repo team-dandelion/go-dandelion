@@ -16,7 +16,6 @@ func initRedis() {
 	var err error
 	redis, err = smart_redis.NewSmartRedis(&smart_redis.Config{
 		RedisType:    config.Conf.Redis.RedisType,
-		Network:      config.Conf.Redis.Network,
 		StartAddr:    config.Conf.Redis.StartAddr,
 		Active:       config.Conf.Redis.Active,
 		Idle:         config.Conf.Redis.Idle,

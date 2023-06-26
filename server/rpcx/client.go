@@ -53,7 +53,7 @@ type (
 
 // 100毫秒后内失败次数达到5次，熔断器打开
 // func() client.Breaker { return client.NewConsecCircuitBreaker(5, 100*time.Millisecond) }
-var breaker func() client.Breaker
+var customOption func() client.Option
 
 func NewRPCClient(conf ClientConfig) (c *ClientPool, err error) {
 	var discovery client.ServiceDiscovery
@@ -98,14 +98,21 @@ func (c *ClientPool) Client(auth ...string) *client.OneClient {
 	return oneClient
 }
 
+func CustomOptions(f func() client.Option) {
+	customOption = f
+}
+
 func option() client.Option {
+	if customOption != nil {
+		return customOption()
+	}
+
 	opt := client.Option{
 		Retries:            10,               // 重试次数
 		TimeToDisallow:     time.Minute,      // 30秒内不会对失败的服务器进行重试
 		ConnectTimeout:     3 * time.Second,  // 连接超时
 		IdleTimeout:        10 * time.Second, // 最大空闲时间
 		BackupLatency:      10 * time.Millisecond,
-		GenBreaker:         breaker,
 		SerializeType:      protocol.MsgPack,
 		CompressType:       protocol.None,
 		TCPKeepAlivePeriod: time.Minute,

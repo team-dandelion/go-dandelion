@@ -1,6 +1,7 @@
 package error_support
 
 import (
+	"fmt"
 	"io/ioutil"
 	"reflect"
 )
@@ -15,6 +16,11 @@ type Error struct {
 
 func (e *Error) Error() string {
 	return e.Msg
+}
+
+func (e *Error) Sprintf(args ...interface{}) *Error {
+	e.Msg = fmt.Sprintf(e.Msg, args...)
+	return e
 }
 
 func Init(path string) {
