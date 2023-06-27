@@ -6,6 +6,10 @@ import (
 )
 
 func initLogger() {
+	if config.Conf.Logger == nil {
+		return
+	}
+
 	//初始化日志
 	if config.Conf.Logger.ConsoleShow ||
 		config.Conf.Logger.FileWrite ||

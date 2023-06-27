@@ -10,7 +10,6 @@ import (
 
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/swag"
-	"github.com/valyala/fasthttp/fasthttpadaptor"
 )
 
 // Config stores echoSwagger configuration variables.
@@ -122,8 +121,6 @@ func RoutingWrapHandler(configFns ...func(c *Config)) routing.Handler {
 			ctx.Type(fileExt[0:], "utf-8")
 			return ctx.SendString(doc)
 		default:
-			fasthttpadaptor.NewFastHTTPHandler(handler)(ctx.RequestCtx)
-
 			switch fileExt {
 			case ".css":
 				ctx.Type(fileExt[0:], "utf-8")

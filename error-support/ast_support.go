@@ -1,6 +1,7 @@
 package error_support
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -25,7 +26,8 @@ func PrintAstInfo(fileName, src string, mode parser.Mode) {
 	fSet := token.NewFileSet()
 	f, err := parser.ParseFile(fSet, fileName, src, mode)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	ast.Print(fSet, f)
 }
@@ -37,7 +39,8 @@ func scanFuncDeclByComment(fileName, src, targetComment string) *ErrorCode {
 	fSet := token.NewFileSet()
 	f, err := parser.ParseFile(fSet, fileName, src, parser.ParseComments)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return nil
 	}
 
 	result := &ErrorCode{

@@ -58,13 +58,13 @@ func (h *RPCHeader) Int32Default(ctx context.Context, key string, def int32) int
 	return int32(value)
 }
 
-func (h *RPCHeader) Int64(ctx context.Context, key string) (int32, error) {
+func (h *RPCHeader) Int64(ctx context.Context, key string) (int64, error) {
 	vStr := h.get(ctx, key)
-	value, err := strconv.ParseInt(vStr, 10, 32)
+	value, err := strconv.ParseInt(vStr, 10, 64)
 	if err != nil {
 		return 0, err
 	}
-	return int32(value), nil
+	return int64(value), nil
 }
 
 func (h *RPCHeader) Int64Default(ctx context.Context, key string, def int64) int64 {
