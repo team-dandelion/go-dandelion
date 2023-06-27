@@ -20,7 +20,7 @@ jobs:
       - name: Set up Go 1.x
         uses: actions/setup-go@v3
         with:
-          go-version: 1.20
+          go-version: 1.19
           check-latest: true
           cache: true
         id: go
@@ -54,7 +54,7 @@ jobs:
       - name: Set up Go 1.x
         uses: actions/setup-go@v3
         with:
-          go-version: 1.20
+          go-version: 1.19
           check-latest: true
           cache: true
 
