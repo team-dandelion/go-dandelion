@@ -11,7 +11,7 @@ type Transact struct {
 }
 
 func TestPrintAstInfo(t *testing.T) {
-	bt, _ := ioutil.ReadFile(`ast_text.go`)
+	bt, _ := ioutil.ReadFile(`ast_support.go`)
 	src := string(bt)
 	PrintAstInfo(``, src, parser.ParseComments)
 }
