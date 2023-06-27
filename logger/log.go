@@ -22,7 +22,7 @@ func RegAdapter(adapterName string) {
 		myLogger.setLogger(AdapterMultiFile)
 		break
 	default:
-		fmt.Fprintln(os.Stderr, "logs:注册的名称未实现:%v", adapterName)
+		_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("logs:注册的名称未实现:%v", adapterName))
 		break
 	}
 }
@@ -84,7 +84,7 @@ func Trace(f interface{}, v ...interface{}) {
 	myLogger.Debug(0, formatLog(f, v...))
 }
 
-//*****************************************************
+// *****************************************************
 func Emergency_CustomFuncCallDepth(funcCallDepth int, f interface{}, v ...interface{}) {
 	myLogger.Emergency(funcCallDepth, formatLog(f, v...))
 }

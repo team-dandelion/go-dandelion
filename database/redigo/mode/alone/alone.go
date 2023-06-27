@@ -7,7 +7,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-type aloneMode struct{ pool redis.Pool }
+type aloneMode struct{ pool *redis.Pool }
 
 func (am *aloneMode) GetConn() redis.Conn {
 	return am.pool.Get()
@@ -32,17 +32,17 @@ func New(optFuncs ...OptFunc) redigo.ModeInterface {
 	for _, optFunc := range optFuncs {
 		optFunc(&opts)
 	}
-	pool := redis.Pool{
+	pool := &redis.Pool{
 		DialContext: func(ctx context.Context) (redis.Conn, error) {
 			conn, err := redis.Dial("tcp", opts.addr, opts.dialOpts...)
 			if err != nil {
 				return nil, err
 			}
-			return &logger.LoggingConn{conn}, nil
+			return &logger.LoggingConn{Conn: conn}, nil
 		},
 	}
 	for _, poolOptFunc := range opts.poolOpts {
-		poolOptFunc(&pool)
+		poolOptFunc(pool)
 	}
 	return &aloneMode{pool: pool}
 }

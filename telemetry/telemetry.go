@@ -32,7 +32,7 @@ func InitTracer(serviceName, agentHostPort string) error {
 
 	_tracer, _closer, err := cfg.NewTracer()
 	if err != nil {
-		fmt.Println("Init GlobalJaegerTracer failed, err : %v", err)
+		fmt.Println("Init GlobalJaegerTracer failed, err : ", err)
 		return err
 	}
 
