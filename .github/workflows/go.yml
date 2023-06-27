@@ -39,7 +39,7 @@ jobs:
             exit 1
           fi
       - name: Test
-        run: go list ./... | grep -v '/application' | grep -v '/config' | go test -race -coverprofile=coverage.txt -covermode=atomic
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
