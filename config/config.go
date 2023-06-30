@@ -144,14 +144,10 @@ func LoadCustomConfig(configs ...interface{}) {
 	if err := vip.ReadInConfig(); err != nil {
 		panic(err)
 	}
-	err := vip.Unmarshal(&Conf)
-	if err != nil {
-		panic(err)
-	}
 
 	// 加载自定义配置
 	for i, _ := range configs {
-		err = vip.Unmarshal(&configs[i])
+		err := vip.Unmarshal(&configs[i])
 		if err != nil {
 			panic(err)
 		}

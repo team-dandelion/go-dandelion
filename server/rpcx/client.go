@@ -7,6 +7,7 @@ import (
 	zkClient "github.com/rpcxio/rpcx-zookeeper/client"
 	"github.com/smallnest/rpcx/client"
 	"github.com/smallnest/rpcx/protocol"
+	"github.com/smallnest/rpcx/share"
 	"time"
 )
 
@@ -108,14 +109,16 @@ func option() client.Option {
 	}
 
 	opt := client.Option{
-		Retries:            10,               // 重试次数
-		TimeToDisallow:     time.Minute,      // 30秒内不会对失败的服务器进行重试
-		ConnectTimeout:     3 * time.Second,  // 连接超时
-		IdleTimeout:        10 * time.Second, // 最大空闲时间
-		BackupLatency:      10 * time.Millisecond,
-		SerializeType:      protocol.MsgPack,
-		CompressType:       protocol.None,
-		TCPKeepAlivePeriod: time.Minute,
+		Retries:             10, // 重试次数
+		RPCPath:             share.DefaultRPCPath,
+		TimeToDisallow:      time.Minute, // 30秒内不会对失败的服务器进行重试
+		ConnectTimeout:      time.Second, // 连接超时
+		BackupLatency:       10 * time.Millisecond,
+		SerializeType:       protocol.MsgPack,
+		CompressType:        protocol.None,
+		TCPKeepAlivePeriod:  time.Minute,
+		MaxWaitForHeartbeat: 30 * time.Second,
+		BidirectionalBlock:  false,
 	}
 
 	return opt
