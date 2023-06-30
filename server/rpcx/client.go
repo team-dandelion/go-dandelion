@@ -6,9 +6,6 @@ import (
 	etcdClient "github.com/rpcxio/rpcx-etcd/client"
 	zkClient "github.com/rpcxio/rpcx-zookeeper/client"
 	"github.com/smallnest/rpcx/client"
-	"github.com/smallnest/rpcx/protocol"
-	"github.com/smallnest/rpcx/share"
-	"time"
 )
 
 const (
@@ -108,18 +105,20 @@ func option() client.Option {
 		return customOption()
 	}
 
-	opt := client.Option{
-		Retries:             10, // 重试次数
-		RPCPath:             share.DefaultRPCPath,
-		TimeToDisallow:      time.Minute, // 30秒内不会对失败的服务器进行重试
-		ConnectTimeout:      time.Second, // 连接超时
-		BackupLatency:       10 * time.Millisecond,
-		SerializeType:       protocol.MsgPack,
-		CompressType:        protocol.None,
-		TCPKeepAlivePeriod:  time.Minute,
-		MaxWaitForHeartbeat: 30 * time.Second,
-		BidirectionalBlock:  false,
-	}
+	//opt := client.Option{
+	//	Retries:             10, // 重试次数
+	//	RPCPath:             share.DefaultRPCPath,
+	//	TimeToDisallow:      time.Minute, // 30秒内不会对失败的服务器进行重试
+	//	ConnectTimeout:      time.Second, // 连接超时
+	//	BackupLatency:       10 * time.Millisecond,
+	//	SerializeType:       protocol.MsgPack,
+	//	CompressType:        protocol.None,
+	//	TCPKeepAlivePeriod:  time.Minute,
+	//	MaxWaitForHeartbeat: 30 * time.Second,
+	//	BidirectionalBlock:  false,
+	//}
+
+	opt := client.DefaultOption
 
 	return opt
 }
