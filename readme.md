@@ -4,7 +4,7 @@
 The go-dandelion project aims to provide developers with a project framework that integrates various components, making it easy to build projects and improve development efficiency. It eliminates the need to spend time on integrating different components, allowing developers to focus on business development.
 
 [![Go](https://github.com/gly-hub/go-dandelion/workflows/Go/badge.svg?branch=main)](https://github.com/gly-hub/go-dandelion/actions)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/942764f9a2664dbd951d84144474e379)](https://app.codacy.com/gh/gly-hub/go-dandelion/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gly-hub/go-dandelion)](https://goreportcard.com/report/github.com/gly-hub/go-dandelion)
 [![codecov](https://codecov.io/gh/gly-hub/go-dandelion/branch/main/graph/badge.svg)](https://codecov.io/gh/gly-hub/go-dandelion)
 [![MIT license](https://img.shields.io/badge/License-Apache2.0-brightgreen.svg)](https://opensource.org/licenses/apache-2-0/)
 [![Release](https://img.shields.io/badge/release-1.2.0-white.svg)](https://pkg.go.dev/github.com/gly-hub/go-dandelion/go-dandelion-cli?tab=doc)
