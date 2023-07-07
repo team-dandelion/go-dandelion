@@ -1,8 +1,7 @@
 package config
 
 type HttpServer struct {
-	Port  int32 `json:"port" yaml:"port"`
-	Pprof int32 `json:"pprof" yaml:"pprof"`
+	Port int32 `json:"port" yaml:"port"`
 }
 
 type RpcServer struct {
@@ -12,7 +11,6 @@ type RpcServer struct {
 	RegisterServers []string `json:"register_servers" yaml:"registerServers"`
 	Addr            string   `json:"addr" yaml:"addr"`
 	Port            int      `json:"port" yaml:"port"`
-	Pprof           int      `json:"pprof" yaml:"pprof"`
 }
 
 type RpcClient struct {
@@ -23,4 +21,9 @@ type RpcClient struct {
 	FailRetryModel  int      `json:"fail_retry_model" yaml:"failRetryModel"`
 	BalanceModel    int      `json:"balance_model" yaml:"balanceModel"`
 	PoolSize        int      `json:"pool_size" yaml:"poolSize"`
+}
+
+type AnalysisServer struct {
+	Pprof      int32 `json:"pprof" yaml:"pprof"`
+	Prometheus bool  `json:"prometheus" yaml:"prometheus"`
 }

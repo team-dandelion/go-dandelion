@@ -13,11 +13,8 @@ import (
 	"github.com/gly-hub/toolbox/ip"
 	"github.com/gly-hub/toolbox/stringx"
 	jsoniter "github.com/json-iterator/go"
-	"net"
-	httpx "net/http"
 	_ "net/http/pprof"
 	"reflect"
-	"strconv"
 )
 
 var (
@@ -159,12 +156,6 @@ func RpcServer(handler interface{}, auth ...rpcx.AuthFunc) {
 	}
 	if len(auth) > 0 {
 		rpcServer.RegisterAuthFunc(auth[0])
-	}
-	if config.Conf.RpcServer.Pprof != 0 {
-		go func() {
-			listener, _ := net.Listen("tcp", net.JoinHostPort("", strconv.Itoa(config.Conf.RpcServer.Pprof)))
-			_ = httpx.Serve(listener, nil)
-		}()
 	}
 	rpcServer.Start()
 }

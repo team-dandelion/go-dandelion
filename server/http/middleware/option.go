@@ -1,4 +1,4 @@
-package http
+package middleware
 
 import routing "github.com/gly-hub/fasthttp-routing"
 
