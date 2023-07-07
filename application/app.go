@@ -19,6 +19,9 @@ func Init() {
 	// 初始化Rpc Client
 	initRpcClient()
 
+	// 初始化分析器
+	initAnalysisServer()
+
 	// 初始化链路追踪
 	initTracer()
 }

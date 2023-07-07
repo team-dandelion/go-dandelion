@@ -41,13 +41,14 @@ const (
 var Conf Config
 
 type Config struct {
-	DB         *DB         `json:"db" yaml:"db"`
-	Redis      *Redis      `json:"redis" yaml:"redis"`
-	Logger     *Logger     `json:"logger" yaml:"logger"`
-	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
-	RpcServer  *RpcServer  `json:"rpc_server" yaml:"rpcServer"`
-	RpcClient  *RpcClient  `json:"rpc_client" yaml:"rpcClient"`
-	Tracer     *Tracer     `json:"tracer" yaml:"tracer"`
+	DB             *DB             `json:"db" yaml:"db"`
+	Redis          *Redis          `json:"redis" yaml:"redis"`
+	Logger         *Logger         `json:"logger" yaml:"logger"`
+	HttpServer     *HttpServer     `json:"http_server" yaml:"httpServer"`
+	RpcServer      *RpcServer      `json:"rpc_server" yaml:"rpcServer"`
+	RpcClient      *RpcClient      `json:"rpc_client" yaml:"rpcClient"`
+	Tracer         *Tracer         `json:"tracer" yaml:"tracer"`
+	AnalysisServer *AnalysisServer `json:"analysis_server" yaml:"analysisServer"`
 }
 
 // InitConfig 需要设置默认环境变量，当系统中存在环境变量值时，会优先使用

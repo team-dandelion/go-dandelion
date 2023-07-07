@@ -202,7 +202,7 @@ func NewMetric(m *Metric, subsystem string) prometheus.Collector {
 	return metric
 }
 
-func (p *Prometheus) Middleware() routing.Handler {
+func (p *Prometheus) HttpMiddleware() routing.Handler {
 	return func(c *routing.Context) error {
 		if string(c.Path()) == p.MetricsPath {
 			return c.Next()

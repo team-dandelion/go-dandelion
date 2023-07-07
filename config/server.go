@@ -24,6 +24,7 @@ type RpcClient struct {
 }
 
 type AnalysisServer struct {
-	Pprof      int32 `json:"pprof" yaml:"pprof"`
-	Prometheus bool  `json:"prometheus" yaml:"prometheus"`
+	AnalysisName string `json:"analysis_name" yaml:"analysisName"`
+	Pprof        int32  `json:"pprof" yaml:"pprof"`
+	Prometheus   bool   `json:"prometheus" yaml:"prometheus"`
 }
