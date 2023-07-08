@@ -43,7 +43,7 @@ type (
 	}
 )
 
-func NewRPCServer(conf ServerConfig) (rpc *Server, err error) {
+func NewRPCServer(conf ServerConfig, plugins ...server.Plugin) (rpc *Server, err error) {
 	// init server
 	s := server.NewServer()
 	// add plugin
@@ -73,6 +73,10 @@ func NewRPCServer(conf ServerConfig) (rpc *Server, err error) {
 
 	// add middleware
 	s.Plugins.Add(&ServerLoggerPlugin{})
+
+	for _, p := range plugins {
+		s.Plugins.Add(p)
+	}
 
 	// new rpc server
 	rpc = &Server{

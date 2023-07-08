@@ -13,13 +13,15 @@ import (
 	"github.com/gly-hub/toolbox/ip"
 	"github.com/gly-hub/toolbox/stringx"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/smallnest/rpcx/server"
 	_ "net/http/pprof"
 	"reflect"
 )
 
 var (
-	rpcServer *rpcx.Server
-	rpcClient *RpcClient
+	rpcServer  *rpcx.Server
+	rpcClient  *RpcClient
+	rpcPlugins []server.Plugin
 )
 
 type RpcClient struct {
@@ -129,6 +131,10 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 	return hc.Success(ctx, reply, rv.FieldByName("Msg").String())
 }
 
+func RegisterRpcPlugin(plugins ...server.Plugin) {
+	rpcPlugins = append(rpcPlugins, plugins...)
+}
+
 func RpcServer(handler interface{}, auth ...rpcx.AuthFunc) {
 	if config.Conf.RpcServer == nil || config.Conf.RpcServer.ServerName == "" ||
 		config.Conf.RpcServer.Port == 0 || config.Conf.RpcServer.RegisterServers == nil {
@@ -150,7 +156,7 @@ func RpcServer(handler interface{}, auth ...rpcx.AuthFunc) {
 		RegisterPlugin:  rpcx.RegisterPluginType(config.Conf.RpcServer.RegisterPlugin),
 		RegisterServers: config.Conf.RpcServer.RegisterServers,
 		Handle:          handler,
-	})
+	}, rpcPlugins)
 	if err != nil {
 		panic(err)
 	}
