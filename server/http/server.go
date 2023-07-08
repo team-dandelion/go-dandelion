@@ -3,26 +3,21 @@ package http
 import (
 	"fmt"
 	routing "github.com/gly-hub/fasthttp-routing"
+	"github.com/gly-hub/go-dandelion/server/http/middleware"
 	"github.com/valyala/fasthttp"
-	"net"
-	"net/http"
-	_ "net/http/pprof"
-	"strconv"
 )
 
 type HttpServer struct {
 	router *routing.Router
 	port   int32
-	pprof  int32
 }
 
-func New(port, pprof int32) *HttpServer {
+func New(port int32) *HttpServer {
 	router := routing.New()
-	router.Use(middlewareSentinel(), middlewareRequestLink(), middlewareCustomError())
+	router.Use(middleware.MiddlewareSentinel(), middleware.MiddlewareRequestLink(), middleware.MiddlewareCustomError())
 	return &HttpServer{
 		router: router,
 		port:   port,
-		pprof:  pprof,
 	}
 }
 
@@ -52,12 +47,5 @@ func (hs *HttpServer) RegisterRoute(prefix string, routes []Route, middlewares .
 }
 
 func (hs *HttpServer) Server() {
-	if hs.pprof != 0 {
-		go func() {
-			listener, _ := net.Listen("tcp", net.JoinHostPort("", strconv.Itoa(int(hs.pprof))))
-			_ = http.Serve(listener, nil)
-		}()
-	}
-
 	fasthttp.ListenAndServe(fmt.Sprintf(":%d", hs.port), hs.router.HandleRequest)
 }

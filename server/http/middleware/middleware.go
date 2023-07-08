@@ -1,4 +1,4 @@
-package http
+package middleware
 
 import (
 	"fmt"
@@ -34,7 +34,7 @@ func checkLogIgnoreResult(path string) bool {
 }
 
 // middlewareRequestLink 请求链路
-func middlewareRequestLink() routing.Handler {
+func MiddlewareRequestLink() routing.Handler {
 	return func(c *routing.Context) error {
 		traceId := xid.New().String()
 		logger.SetRequestId(traceId)
@@ -88,7 +88,7 @@ func middlewareRequestLink() routing.Handler {
 	}
 }
 
-func middlewareCustomError() routing.Handler {
+func MiddlewareCustomError() routing.Handler {
 	return func(c *routing.Context) error {
 		defer func() {
 			if err := recover(); err != nil {
@@ -105,7 +105,7 @@ func middlewareCustomError() routing.Handler {
 	}
 }
 
-func middlewareSentinel() routing.Handler {
+func MiddlewareSentinel() routing.Handler {
 	if _, err := system.LoadRules([]*system.Rule{
 		{
 			MetricType:   system.InboundQPS,
