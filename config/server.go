@@ -22,9 +22,3 @@ type RpcClient struct {
 	BalanceModel    int      `json:"balance_model" yaml:"balanceModel"`
 	PoolSize        int      `json:"pool_size" yaml:"poolSize"`
 }
-
-type AnalysisServer struct {
-	AnalysisName string `json:"analysis_name" yaml:"analysisName"`
-	Pprof        int32  `json:"pprof" yaml:"pprof"`
-	Prometheus   bool   `json:"prometheus" yaml:"prometheus"`
-}
