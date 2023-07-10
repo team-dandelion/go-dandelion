@@ -156,7 +156,7 @@ func RpcServer(handler interface{}, auth ...rpcx.AuthFunc) {
 		RegisterPlugin:  rpcx.RegisterPluginType(config.Conf.RpcServer.RegisterPlugin),
 		RegisterServers: config.Conf.RpcServer.RegisterServers,
 		Handle:          handler,
-	}, rpcPlugins)
+	}, rpcPlugins...)
 	if err != nil {
 		panic(err)
 	}
