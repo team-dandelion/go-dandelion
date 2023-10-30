@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/gly-hub/go-dandelion/logger"
-	"github.com/gly-hub/go-dandelion/telemetry"
 	"github.com/gomodule/redigo/redis"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/log"
+	"github.com/team-dandelion/go-dandelion/logger"
+	"github.com/team-dandelion/go-dandelion/telemetry"
 	"time"
 )
 

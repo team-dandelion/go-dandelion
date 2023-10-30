@@ -3,12 +3,12 @@
 ## 📚关于go-dandelion
 go-dandelion项目意在通过集成相关组件，方便开发者快速构建项目框架，提升开发效率。不在浪费时间在各组组件的集成上，可快速进行业务开发。
 
-[![Go](https://github.com/gly-hub/go-dandelion/workflows/Go/badge.svg?branch=main)](https://github.com/gly-hub/go-dandelion/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/gly-hub/go-dandelion)](https://goreportcard.com/report/github.com/gly-hub/go-dandelion)
+[![Go](https://github.com/team-dandelion/go-dandelion/workflows/Go/badge.svg?branch=main)](https://github.com/team-dandelion/go-dandelion/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/team-dandelion/go-dandelion)](https://goreportcard.com/report/github.com/team-dandelion/go-dandelion)
 [![codecov](https://codecov.io/gh/gly-hub/go-dandelion/branch/main/graph/badge.svg)](https://codecov.io/gh/gly-hub/go-dandelion)
 [![MIT license](https://img.shields.io/badge/License-Apache2.0-brightgreen.svg)](https://opensource.org/licenses/apache-2-0/)
-[![Release](https://img.shields.io/badge/release-1.2.0-white.svg)](https://pkg.go.dev/github.com/gly-hub/go-dandelion/go-dandelion-cli?tab=doc)
-[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/github.com/gly-hub/go-dandelion/go-dandelion-cli?tab=doc)
+[![Release](https://img.shields.io/badge/release-1.2.0-white.svg)](https://pkg.go.dev/github.com/team-dandelion/go-dandelion/go-dandelion-cli?tab=doc)
+[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/github.com/team-dandelion/go-dandelion/go-dandelion-cli?tab=doc)
 
 [![Security Status](https://www.murphysec.com/platform3/v31/badge/1666706410635550720.svg)](https://www.murphysec.com/console/report/1666706410597801984/1666706410635550720)
 
@@ -34,8 +34,8 @@ go-dandelion项目意在通过集成相关组件，方便开发者快速构建�
 
 ### 1.安装
 ```
-go get github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
-go install github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
+go get github.com/team-dandelion/go-dandelion/go-dandelion-cli@latest
+go install github.com/team-dandelion/go-dandelion/go-dandelion-cli@latest
 ```
 
 ### 2.创建项目
@@ -66,7 +66,7 @@ go build -o example-server
 
 ## 🔥贡献者
 
-<a href="https://github.com/gly-hub/go-dandelion/graphs/contributors">
+<a href="https://github.com/team-dandelion/go-dandelion/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=gly-hub/go-dandelion" />
 </a>
 

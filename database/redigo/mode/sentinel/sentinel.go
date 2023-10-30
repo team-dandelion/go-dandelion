@@ -7,7 +7,7 @@ import (
 	"github.com/FZambia/sentinel"
 	"github.com/gomodule/redigo/redis"
 
-	"github.com/gly-hub/go-dandelion/database/redigo"
+	"github.com/team-dandelion/go-dandelion/database/redigo"
 )
 
 type sentinelMode struct {

@@ -1,8 +1,8 @@
 package application
 
 import (
-	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/build"
 	"github.com/spf13/cobra"
+	"github.com/team-dandelion/go-dandelion/go-dandelion-cli/internal/build"
 )
 
 var (

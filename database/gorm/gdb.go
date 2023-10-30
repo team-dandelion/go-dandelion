@@ -1,11 +1,11 @@
 package gorm
 
 import (
-	"github.com/gly-hub/go-dandelion/config"
-	"github.com/gly-hub/go-dandelion/database/redigo"
-	"github.com/gly-hub/go-dandelion/database/redigo/tools"
 	timex "github.com/gly-hub/toolbox/time"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/team-dandelion/go-dandelion/config"
+	"github.com/team-dandelion/go-dandelion/database/redigo"
+	"github.com/team-dandelion/go-dandelion/database/redigo/tools"
 	"gorm.io/gorm"
 	"sync"
 )

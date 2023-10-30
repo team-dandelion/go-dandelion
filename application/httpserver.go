@@ -1,8 +1,8 @@
 package application
 
 import (
-	"github.com/gly-hub/go-dandelion/config"
-	"github.com/gly-hub/go-dandelion/server/http"
+	"github.com/team-dandelion/go-dandelion/config"
+	"github.com/team-dandelion/go-dandelion/server/http"
 )
 
 var httpServer *http.HttpServer

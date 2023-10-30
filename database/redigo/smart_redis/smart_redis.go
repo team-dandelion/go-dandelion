@@ -2,11 +2,11 @@ package smart_redis
 
 import (
 	"errors"
-	"github.com/gly-hub/go-dandelion/database/redigo"
-	"github.com/gly-hub/go-dandelion/database/redigo/mode/alone"
-	"github.com/gly-hub/go-dandelion/database/redigo/mode/cluster"
-	"github.com/gly-hub/go-dandelion/database/redigo/mode/sentinel"
 	"github.com/gomodule/redigo/redis"
+	"github.com/team-dandelion/go-dandelion/database/redigo"
+	"github.com/team-dandelion/go-dandelion/database/redigo/mode/alone"
+	"github.com/team-dandelion/go-dandelion/database/redigo/mode/cluster"
+	"github.com/team-dandelion/go-dandelion/database/redigo/mode/sentinel"
 	"time"
 )
 

@@ -1,6 +1,6 @@
 package application
 
-import "github.com/gly-hub/go-dandelion/config"
+import "github.com/team-dandelion/go-dandelion/config"
 
 /*
  插件功能。

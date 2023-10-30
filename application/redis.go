@@ -1,10 +1,10 @@
 package application
 
 import (
-	"github.com/gly-hub/go-dandelion/config"
-	"github.com/gly-hub/go-dandelion/database/redigo"
-	"github.com/gly-hub/go-dandelion/database/redigo/smart_redis"
 	timex "github.com/gly-hub/toolbox/time"
+	"github.com/team-dandelion/go-dandelion/config"
+	"github.com/team-dandelion/go-dandelion/database/redigo"
+	"github.com/team-dandelion/go-dandelion/database/redigo/smart_redis"
 )
 
 var redis *smart_redis.SmartRedis

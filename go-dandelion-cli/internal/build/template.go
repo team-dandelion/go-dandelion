@@ -1,7 +1,7 @@
 package build
 
 import (
-	"github.com/gly-hub/go-dandelion/go-dandelion-cli/internal/asset"
+	"github.com/team-dandelion/go-dandelion/go-dandelion-cli/internal/asset"
 	"os"
 	"text/template"
 )

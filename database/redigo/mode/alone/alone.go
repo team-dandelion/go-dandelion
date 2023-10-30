@@ -2,9 +2,9 @@ package alone
 
 import (
 	"context"
-	"github.com/gly-hub/go-dandelion/database/redigo"
-	"github.com/gly-hub/go-dandelion/database/redigo/logger"
 	"github.com/gomodule/redigo/redis"
+	"github.com/team-dandelion/go-dandelion/database/redigo"
+	"github.com/team-dandelion/go-dandelion/database/redigo/logger"
 )
 
 type aloneMode struct{ pool *redis.Pool }

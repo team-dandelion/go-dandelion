@@ -1,4 +1,4 @@
-module github.com/gly-hub/go-dandelion
+module github.com/team-dandelion/go-dandelion
 
 go 1.18
 

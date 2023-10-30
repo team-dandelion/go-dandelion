@@ -3,12 +3,12 @@
 
 The go-dandelion project aims to provide developers with a project framework that integrates various components, making it easy to build projects and improve development efficiency. It eliminates the need to spend time on integrating different components, allowing developers to focus on business development.
 
-[![Go](https://github.com/gly-hub/go-dandelion/workflows/Go/badge.svg?branch=main)](https://github.com/gly-hub/go-dandelion/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/gly-hub/go-dandelion)](https://goreportcard.com/report/github.com/gly-hub/go-dandelion)
+[![Go](https://github.com/team-dandelion/go-dandelion/workflows/Go/badge.svg?branch=main)](https://github.com/team-dandelion/go-dandelion/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/team-dandelion/go-dandelion)](https://goreportcard.com/report/github.com/team-dandelion/go-dandelion)
 [![codecov](https://codecov.io/gh/gly-hub/go-dandelion/branch/main/graph/badge.svg)](https://codecov.io/gh/gly-hub/go-dandelion)
 [![MIT license](https://img.shields.io/badge/License-Apache2.0-brightgreen.svg)](https://opensource.org/licenses/apache-2-0/)
-[![Release](https://img.shields.io/badge/release-1.2.0-white.svg)](https://pkg.go.dev/github.com/gly-hub/go-dandelion/go-dandelion-cli?tab=doc)
-[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/github.com/gly-hub/go-dandelion/go-dandelion-cli?tab=doc)
+[![Release](https://img.shields.io/badge/release-1.2.0-white.svg)](https://pkg.go.dev/github.com/team-dandelion/go-dandelion/go-dandelion-cli?tab=doc)
+[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/github.com/team-dandelion/go-dandelion/go-dandelion-cli?tab=doc)
 
 [![Security Status](https://www.murphysec.com/platform3/v31/badge/1666706410635550720.svg)](https://www.murphysec.com/console/report/1666706410597801984/1666706410635550720)
 
@@ -34,8 +34,8 @@ The go-dandelion project aims to provide developers with a project framework tha
 
 ## 1. Installation
 ```
-go get github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
-go install github.com/gly-hub/go-dandelion/go-dandelion-cli@latest
+go get github.com/team-dandelion/go-dandelion/go-dandelion-cli@latest
+go install github.com/team-dandelion/go-dandelion/go-dandelion-cli@latest
 ```
 
 ## 2. Create a Project
@@ -66,7 +66,7 @@ go build -o example-server
 
 ## 🔥Contributors
 
-<a href="https://github.com/gly-hub/go-dandelion/graphs/contributors">
+<a href="https://github.com/team-dandelion/go-dandelion/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=gly-hub/go-dandelion" />
 </a>
 

@@ -3,7 +3,7 @@ package http
 import (
 	"fmt"
 	routing "github.com/gly-hub/fasthttp-routing"
-	"github.com/gly-hub/go-dandelion/server/http/middleware"
+	"github.com/team-dandelion/go-dandelion/server/http/middleware"
 	"github.com/valyala/fasthttp"
 )
 

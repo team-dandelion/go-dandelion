@@ -2,12 +2,12 @@ package application
 
 import (
 	"errors"
-	"github.com/gly-hub/go-dandelion/config"
-	dgorm "github.com/gly-hub/go-dandelion/database/gorm"
-	"github.com/gly-hub/go-dandelion/logger"
 	timex "github.com/gly-hub/toolbox/time"
 	zedis "github.com/gomodule/redigo/redis"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/team-dandelion/go-dandelion/config"
+	dgorm "github.com/team-dandelion/go-dandelion/database/gorm"
+	"github.com/team-dandelion/go-dandelion/logger"
 	"gorm.io/gorm"
 )
 

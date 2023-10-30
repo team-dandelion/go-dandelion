@@ -2,11 +2,11 @@ package rpcx
 
 import (
 	"context"
-	"github.com/gly-hub/go-dandelion/logger"
-	"github.com/gly-hub/go-dandelion/telemetry"
 	"github.com/opentracing/opentracing-go"
 	"github.com/petermattis/goid"
 	"github.com/smallnest/rpcx/protocol"
+	"github.com/team-dandelion/go-dandelion/logger"
+	"github.com/team-dandelion/go-dandelion/telemetry"
 	"sync"
 	"time"
 )

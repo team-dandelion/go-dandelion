@@ -1,8 +1,8 @@
 package application
 
 import (
-	"github.com/gly-hub/go-dandelion/config"
-	"github.com/gly-hub/go-dandelion/logger"
+	"github.com/team-dandelion/go-dandelion/config"
+	"github.com/team-dandelion/go-dandelion/logger"
 )
 
 func initLogger() {

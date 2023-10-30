@@ -1,9 +1,9 @@
 package tools
 
 import (
-	"github.com/gly-hub/go-dandelion/database/redigo"
-	"github.com/gly-hub/go-dandelion/logger"
 	"github.com/gomodule/redigo/redis"
+	"github.com/team-dandelion/go-dandelion/database/redigo"
+	"github.com/team-dandelion/go-dandelion/logger"
 	"sync"
 	"unsafe"
 )
