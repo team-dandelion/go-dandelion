@@ -45,7 +45,6 @@ type (
 	}
 	ClientPool struct {
 		clientPool *client.OneClientPool
-		etcdDis    client.ServiceDiscovery
 	}
 )
 
@@ -56,6 +55,14 @@ var customOption func() client.Option
 func NewRPCClient(conf ClientConfig) (c *ClientPool, err error) {
 	var discovery client.ServiceDiscovery
 	switch conf.RegisterPlugin {
+	case Multiple:
+		var servers []*client.KVPair
+		for _, v := range conf.RegisterServers {
+			servers = append(servers, &client.KVPair{
+				Key: v,
+			})
+		}
+		discovery, err = client.NewMultipleServersDiscovery(servers)
 	case ETCD:
 		discovery, err = etcdClient.NewEtcdV3Discovery(conf.BasePath, "",
 			conf.RegisterServers, true, nil)
@@ -80,7 +87,6 @@ func NewRPCClient(conf ClientConfig) (c *ClientPool, err error) {
 		option())
 	return &ClientPool{
 		clientPool: clientPool,
-		etcdDis:    discovery,
 	}, nil
 
 }

@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	ETCD RegisterPluginType = "etcd"
-	ZK   RegisterPluginType = "zookeeper"
-	Con  RegisterPluginType = "consul"
+	Multiple RegisterPluginType = "multiple"
+	ETCD     RegisterPluginType = "etcd"
+	ZK       RegisterPluginType = "zookeeper"
+	Con      RegisterPluginType = "consul"
 )
 
 type (
@@ -49,19 +50,24 @@ func NewRPCServer(conf ServerConfig, plugins ...server.Plugin) (rpc *Server, err
 	// add plugin
 	var plugin server.Plugin
 	switch conf.RegisterPlugin {
+	case Multiple:
+
 	case ETCD:
 		plugin, err = EtcdV3Register(conf)
+		s.Plugins.Add(plugin)
 	case ZK:
 		plugin, err = ZooKeeperRegister(conf)
+		s.Plugins.Add(plugin)
 	case Con:
 		plugin, err = ConsulRegister(conf)
+		s.Plugins.Add(plugin)
 	default:
 		err = fmt.Errorf("not support register plugin: %s", conf.RegisterPlugin)
 	}
 	if err != nil {
 		return nil, err
 	}
-	s.Plugins.Add(plugin)
+
 	// register server name
 	if err = s.RegisterName(conf.ServerName, conf.Handle, ""); err != nil {
 		return nil, err
