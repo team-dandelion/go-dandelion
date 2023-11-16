@@ -1,9 +1,9 @@
 package cluster
 
 import (
+	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"github.com/mna/redisc"
-
 	"github.com/team-dandelion/go-dandelion/database/redigo"
 )
 
@@ -28,8 +28,8 @@ func (cm *clusterMode) String() string { return "cluster" }
 func New(optFuncs ...OptFunc) redigo.ModeInterface {
 	opts := options{
 		nodes: []string{
-			"127.0.0.1:30001", "127.0.0.1:30002", "127.0.0.1:30003",
-			"127.0.0.1:30004", "127.0.0.1:30005", "127.0.0.1:30006",
+			"127.0.0.1:6380", "127.0.0.1:6381", "127.0.0.1:6382",
+			"127.0.0.1:6383", "127.0.0.1:6384", "127.0.0.1:6385",
 		},
 		dialOpts: redigo.DefaultDialOpts(),
 		poolOpts: redigo.DefaultPoolOpts(),
@@ -52,6 +52,10 @@ func New(optFuncs ...OptFunc) redigo.ModeInterface {
 			}
 			return pool, nil
 		},
+	}
+
+	if terr := rc.Refresh(); terr != nil {
+		fmt.Println(terr)
 	}
 	return &clusterMode{rc: rc}
 }
