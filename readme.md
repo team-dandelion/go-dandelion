@@ -74,4 +74,4 @@ go build -o example-server
 if you find it interesting!
 
 ## Open Source
-[Apache License, Version 2.0](LICENSE.txt)
+[MIT License](LICENSE.txt)
