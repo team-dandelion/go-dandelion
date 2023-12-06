@@ -74,4 +74,4 @@ go build -o example-server
 if you find it interesting!
 
 ## Open Source
-[MIT License](LICENSE.txt)
+[MIT License](LICENSE)
