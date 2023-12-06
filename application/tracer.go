@@ -7,6 +7,9 @@ import (
 
 func initTracer() {
 	if config.Conf.Tracer != nil && config.Conf.Tracer.OpenTrace {
-		_ = telemetry.InitTracer(config.Conf.Tracer.TraceName, config.Conf.Tracer.Host)
+		err := telemetry.InitTracer(config.Conf.Tracer.TraceName, config.Conf.Tracer.Host)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
