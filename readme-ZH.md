@@ -75,4 +75,4 @@ go build -o example-server
 如果你对该项目感兴趣，请点个星哦！
 
 ## 🔑开源
-[MIT License](LICENSE.txt)
+[MIT License](LICENSE)
