@@ -14,7 +14,6 @@ import (
 	"github.com/team-dandelion/go-dandelion/server/http"
 	"github.com/team-dandelion/go-dandelion/server/rpcx"
 	"github.com/team-dandelion/go-dandelion/telemetry"
-	_ "net/http/pprof"
 	"reflect"
 )
 

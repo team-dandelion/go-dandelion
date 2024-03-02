@@ -23,6 +23,9 @@ func (hc *HttpController) ReadParams() error {
 }
 
 func (hc *HttpController) ReadJson(ctx *routing.Context, data interface{}) error {
+	if len(ctx.PostBody()) == 0 {
+		return nil
+	}
 	err := jsoniter.Unmarshal(ctx.PostBody(), data)
 	return err
 }
