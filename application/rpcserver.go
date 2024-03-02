@@ -119,15 +119,25 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 		return hc.Fail(ctx, &error_support.Error{Code: 5001, Msg: "服务器异常"})
 	}
 
-	rv := reflect.ValueOf(reply)
-	if rv.Kind() == reflect.Ptr {
-		rv = rv.Elem()
+	rt := reflect.TypeOf(reply)
+	if rt.Kind() == reflect.Ptr {
+		rt = rt.Elem()
 	}
-	if rv.FieldByName("Code").Int() != int64(0) {
-		return hc.Fail(ctx, &error_support.Error{Code: int(rv.FieldByName("Code").Int()), Msg: rv.FieldByName("Msg").String()})
+	_, cOk := rt.FieldByName("Code")
+	_, mOk := rt.FieldByName("Msg")
+	if mOk && cOk {
+		rv := reflect.ValueOf(reply)
+		if rv.Kind() == reflect.Ptr {
+			rv = rv.Elem()
+		}
+
+		if rv.FieldByName("Code").Int() != int64(0) {
+			return hc.Fail(ctx, &error_support.Error{Code: int(rv.FieldByName("Code").Int()), Msg: rv.FieldByName("Msg").String()})
+		}
+		return hc.Success(ctx, reply, rv.FieldByName("Msg").String())
 	}
 
-	return hc.Success(ctx, reply, rv.FieldByName("Msg").String())
+	return hc.Success(ctx, reply, "")
 }
 
 func RegisterRpcPlugin(plugins ...server.Plugin) {
