@@ -30,39 +30,10 @@ The go-dandelion project aims to provide developers with a project framework tha
 + Integrated logging, distributed tracing, rate limiting, circuit breaking, service registration, service discovery, and other features.
 + Customizable middleware and plugins.
 
-## go-dandelion-cli Usage
-
-## 1. Installation
-```
-go get github.com/team-dandelion/go-dandelion/go-dandelion-cli@latest
-go install github.com/team-dandelion/go-dandelion/go-dandelion-cli@latest
-```
-
-## 2. Create a Project
-Create a local project directory and create the corresponding project based on the prompts.
-```shell
-# Create an application
-go-dandelion-cli app -n go-admin-example
-# Enter the application directory
-cd go-admin-example
-# Build the service
-go-dandelion-cli build -n go-admin-example
-Enter the type of service to create, enter a number (1 for rpc, 2 for http): 1
-RPC service name: example-server
-Initialize MySQL (y/n): y
-Initialize Redis (y/n): y
-Initialize logger (y/n): y
-Initialize trace links (y/n): y
-```
-
-## 3. Run the Project
-```shell
-cd example-server
-# Enter the service directory
-go build -o example-server
-# Run the service
-./example-server server
-```
+## go-dandelion-cli
+<a href="https://github.com/team-dandelion/go-dandelion-cli">
+  go-dandelion-cli
+</a>
 
 ## 🔥Contributors
 
