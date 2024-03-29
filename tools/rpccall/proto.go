@@ -63,14 +63,14 @@ func SProtoCall(ctx *routing.Context, param interface{}, handler interface{}) er
 	if rt.Kind() == reflect.Ptr {
 		rt = rt.Elem()
 	}
-	_, cOk := rt.FieldByName("Code")
-	_, mOk := rt.FieldByName("Msg")
-	if mOk && cOk {
-		rv := reflect.ValueOf(rets[0].Interface())
-		if rv.Kind() == reflect.Ptr {
-			rv = rv.Elem()
+	_, cOk := rt.FieldByName("CommonResp")
+	if cOk {
+		rt2 := reflect.ValueOf(rets[0].Interface())
+		if rt2.Kind() == reflect.Ptr {
+			rt2 = rt2.Elem()
 		}
 
+		rv := rt2.FieldByName("CommonResp").Elem()
 		if rv.FieldByName("Code").Int() != int64(0) {
 			return hc.Fail(ctx, &error_support.Error{Code: int(rv.FieldByName("Code").Int()), Msg: rv.FieldByName("Msg").String()})
 		}
