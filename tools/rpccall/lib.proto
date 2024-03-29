@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package rpccall;
+option go_package = "github.com/team-dandelion/go-dandelion/tools/rpccall";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+message CommonResp {
+  int32 code = 1 [(gogoproto.jsontag) = '-'];
+  string msg = 2 [(gogoproto.jsontag) = '-'];
+}
