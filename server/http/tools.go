@@ -41,6 +41,7 @@ func (hc *HttpController) Success(ctx *routing.Context, data interface{}, msg st
 	byteD, _ := json.Marshal(resp)
 
 	ctx.Success("application/json", byteD)
+	ctx.Abort()
 	return nil
 }
 
@@ -58,5 +59,6 @@ func (hc *HttpController) Fail(ctx *routing.Context, err error, msg ...string) e
 	byteD, _ := json.Marshal(resp)
 
 	ctx.Success("application/json", byteD)
+	ctx.Abort()
 	return nil
 }
