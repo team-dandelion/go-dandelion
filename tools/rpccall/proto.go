@@ -71,7 +71,10 @@ func SProtoCall(ctx *routing.Context, param interface{}, handler interface{}) er
 		}
 
 		rv := rt2.FieldByName("CommonResp").Elem()
-		if rv.FieldByName("Code").Int() != int64(0) {
+		if !rv.IsValid() {
+			return hc.Success(ctx, rets[0].Interface(), "")
+		}
+		if rv.FieldByName("Code").IsValid() && rv.FieldByName("Code").Int() != int64(0) {
 			return hc.Fail(ctx, &error_support.Error{Code: int(rv.FieldByName("Code").Int()), Msg: rv.FieldByName("Msg").String()})
 		}
 		return hc.Success(ctx, rets[0].Interface(), rv.FieldByName("Msg").String())
