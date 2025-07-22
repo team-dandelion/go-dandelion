@@ -2,6 +2,9 @@ package rpccall
 
 import (
 	"context"
+	fmt "fmt"
+	"reflect"
+
 	routing "github.com/gly-hub/fasthttp-routing"
 	"github.com/gly-hub/toolbox/stringx"
 	jsoniter "github.com/json-iterator/go"
@@ -11,7 +14,6 @@ import (
 	"github.com/team-dandelion/go-dandelion/server/http"
 	"github.com/team-dandelion/go-dandelion/server/rpcx"
 	"github.com/team-dandelion/go-dandelion/telemetry"
-	"reflect"
 )
 
 func SProtoCall(ctx *routing.Context, param interface{}, handler interface{}) error {
@@ -56,6 +58,7 @@ func SProtoCall(ctx *routing.Context, param interface{}, handler interface{}) er
 	rets := refHandler.Call(inParam)
 	if !rets[1].IsNil() {
 		err := rets[1].Interface().(error)
+		fmt.Println(err)
 		return hc.Fail(ctx, &error_support.Error{Code: 5000, Msg: err.Error()})
 	}
 	// 对rpc响应内容进行处理

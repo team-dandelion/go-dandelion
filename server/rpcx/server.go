@@ -3,14 +3,15 @@ package rpcx
 import (
 	"context"
 	"fmt"
+	"hash/crc32"
+	"time"
+
 	"github.com/rcrowley/go-metrics"
 	consulPlugin "github.com/rpcxio/rpcx-consul/serverplugin"
 	etcdPlugin "github.com/rpcxio/rpcx-etcd/serverplugin"
 	zookeeperPlugin "github.com/rpcxio/rpcx-zookeeper/serverplugin"
 	"github.com/smallnest/rpcx/protocol"
 	"github.com/smallnest/rpcx/server"
-	"hash/crc32"
-	"time"
 )
 
 const (
@@ -110,6 +111,7 @@ func (s *Server) Start() {
 		if err != nil {
 			panic(err)
 		}
+
 	}()
 }
 

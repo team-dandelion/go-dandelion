@@ -3,12 +3,13 @@ package config
 import (
 	"errors"
 	"fmt"
-	"github.com/spf13/viper"
-	_ "gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/spf13/viper"
+	_ "gopkg.in/yaml.v2"
 )
 
 var (
@@ -42,6 +43,7 @@ var Conf Config
 
 type Config struct {
 	DB         *DB         `json:"db" yaml:"db"`
+	Mongo      *Mongo      `json:"mongo" yaml:"mongo"`
 	Redis      *Redis      `json:"redis" yaml:"redis"`
 	Logger     *Logger     `json:"logger" yaml:"logger"`
 	HttpServer *HttpServer `json:"http_server" yaml:"httpServer"`
