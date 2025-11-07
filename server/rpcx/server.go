@@ -9,6 +9,7 @@ import (
 	"github.com/rcrowley/go-metrics"
 	consulPlugin "github.com/rpcxio/rpcx-consul/serverplugin"
 	etcdPlugin "github.com/rpcxio/rpcx-etcd/serverplugin"
+	redisPlugin "github.com/rpcxio/rpcx-redis/serverplugin"
 	zookeeperPlugin "github.com/rpcxio/rpcx-zookeeper/serverplugin"
 	"github.com/smallnest/rpcx/protocol"
 	"github.com/smallnest/rpcx/server"
@@ -19,6 +20,7 @@ const (
 	ETCD     RegisterPluginType = "etcd"
 	ZK       RegisterPluginType = "zookeeper"
 	Con      RegisterPluginType = "consul"
+	Redis    RegisterPluginType = "redis"
 )
 
 type (
@@ -61,6 +63,9 @@ func NewRPCServer(conf ServerConfig, plugins ...server.Plugin) (rpc *Server, err
 		s.Plugins.Add(plugin)
 	case Con:
 		plugin, err = ConsulRegister(conf)
+		s.Plugins.Add(plugin)
+	case Redis:
+		plugin, err = RedisRegister(conf)
 		s.Plugins.Add(plugin)
 	default:
 		err = fmt.Errorf("not support register plugin: %s", conf.RegisterPlugin)
@@ -154,6 +159,19 @@ func ConsulRegister(conf ServerConfig) (server.Plugin, error) {
 	s := &consulPlugin.ConsulRegisterPlugin{
 		ServiceAddress: serverAddress(conf.Addr),
 		ConsulServers:  conf.RegisterServers,
+		BasePath:       conf.BasePath,
+		UpdateInterval: time.Minute,
+	}
+	if err := s.Start(); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
+func RedisRegister(conf ServerConfig) (server.Plugin, error) {
+	s := &redisPlugin.RedisRegisterPlugin{
+		ServiceAddress: serverAddress(conf.Addr),
+		RedisServers:   conf.RegisterServers,
 		BasePath:       conf.BasePath,
 		UpdateInterval: time.Minute,
 	}

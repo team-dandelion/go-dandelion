@@ -17,6 +17,7 @@ require (
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475
 	github.com/rpcxio/rpcx-consul v0.0.0-20220730062257-1ff0472e730f
 	github.com/rpcxio/rpcx-etcd v0.2.0
+	github.com/rpcxio/rpcx-redis v0.0.0-20250107024620-f10ac7d956cb
 	github.com/rpcxio/rpcx-zookeeper v0.0.0-20220730061732-d20531677676
 	github.com/rs/xid v1.4.0
 	github.com/smallnest/rpcx v1.8.7
@@ -26,6 +27,7 @@ require (
 	github.com/swaggo/swag v1.8.10
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	github.com/valyala/fasthttp v1.45.0
+	go.mongodb.org/mongo-driver v1.17.4
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.4.7
 	gorm.io/driver/postgres v1.5.0
@@ -52,6 +54,7 @@ require (
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-jump v0.0.0-20211018200510-ba001c3ffce0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/edwingeng/doublejump v1.0.1 // indirect
 	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a // indirect
 	github.com/fatih/color v1.14.1 // indirect
@@ -62,6 +65,7 @@ require (
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-ping/ping v1.1.0 // indirect
+	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0 // indirect
 	github.com/golang/mock v1.6.0 // indirect
@@ -146,7 +150,6 @@ require (
 	go.etcd.io/etcd/client/pkg/v3 v3.5.6 // indirect
 	go.etcd.io/etcd/client/v2 v2.305.6 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.6 // indirect
-	go.mongodb.org/mongo-driver v1.17.4 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect

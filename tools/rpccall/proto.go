@@ -3,6 +3,7 @@ package rpccall
 import (
 	"context"
 	"reflect"
+	"strings"
 
 	routing "github.com/gly-hub/fasthttp-routing"
 	"github.com/gly-hub/toolbox/stringx"
@@ -26,7 +27,8 @@ func SProtoCall(ctx *routing.Context, param interface{}, handler interface{}) er
 		return hc.Fail(ctx, &error_support.Error{Code: RPCServerFailCode, Msg: "数据解析失败"})
 	}
 
-	if string(ctx.Request.Header.ContentType()) == "application/json" && len(ctx.PostBody()) > 0 {
+	reqContentType := string(ctx.Request.Header.ContentType())
+	if strings.Contains(reqContentType, "application/json") && len(ctx.PostBody()) > 0 {
 		logger.Info(string(ctx.PostBody()))
 		if err := hc.ReadJson(ctx, param); err != nil {
 			return hc.Fail(ctx, &error_support.Error{Code: RPCServerFailCode, Msg: "数据解析失败"})

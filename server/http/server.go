@@ -24,7 +24,7 @@ func New(port int32) *HttpServer {
 }
 
 func (hs *HttpServer) Router() *routing.RouteGroup {
-	return hs.router.Group("/api")
+	return hs.router.Group("")
 }
 
 func (hs *HttpServer) Port() int32 {
