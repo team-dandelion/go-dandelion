@@ -1,6 +1,7 @@
 package error_support
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"reflect"
@@ -16,6 +17,16 @@ type Error struct {
 
 func (e *Error) Error() string {
 	return e.Msg
+}
+
+// ToJSON 将错误转换为 JSON 格式的字符串，用于 RPC 传输
+func (e *Error) ToJSON() string {
+	return fmt.Sprintf(`{"code":%d,"msg":"%s"}`, e.Code, e.Msg)
+}
+
+// ToRPCError 将 Error 转换为可通过 RPC 传输的 error，保留错误码信息
+func (e *Error) ToRPCError() error {
+	return errors.New(e.ToJSON())
 }
 
 func (e *Error) Sprintf(args ...interface{}) *Error {

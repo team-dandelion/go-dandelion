@@ -1,11 +1,19 @@
-package http
+package rpccall
 
 import (
 	"encoding/json"
+
 	routing "github.com/gly-hub/fasthttp-routing"
 	jsoniter "github.com/json-iterator/go"
 	error_support "github.com/team-dandelion/go-dandelion/error-support"
 	"github.com/team-dandelion/go-dandelion/logger"
+)
+
+const (
+	SuccessCode          = 20000
+	SystemFailCode       = 50000
+	ParamsFormatFailCode = 50001 // 参数解析错误
+	RPCServerFailCode    = 50002 // RPC服务异常
 )
 
 type HttpController struct {
@@ -32,7 +40,7 @@ func (hc *HttpController) ReadJson(ctx *routing.Context, data interface{}) error
 
 func (hc *HttpController) Success(ctx *routing.Context, data interface{}, msg string) error {
 	resp := &Response{
-		Code:      2000,
+		Code:      SuccessCode,
 		Msg:       msg,
 		Data:      data,
 		RequestId: logger.GetRequestId(),

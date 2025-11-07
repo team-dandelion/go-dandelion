@@ -2,16 +2,16 @@ package rpccall
 
 import (
 	"context"
+	"reflect"
+
 	routing "github.com/gly-hub/fasthttp-routing"
 	"github.com/gly-hub/toolbox/stringx"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/team-dandelion/go-dandelion/application"
 	error_support "github.com/team-dandelion/go-dandelion/error-support"
 	"github.com/team-dandelion/go-dandelion/logger"
-	"github.com/team-dandelion/go-dandelion/server/http"
 	"github.com/team-dandelion/go-dandelion/server/rpcx"
 	"github.com/team-dandelion/go-dandelion/telemetry"
-	"reflect"
 )
 
 // RpcCall rpc请求
@@ -57,9 +57,9 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 	if rpcClient.ClientPool == nil {
 		panic("请配置rpcx参数")
 	}
-	var hc http.HttpController
+	var hc HttpController
 	if err := hc.ReadJson(ctx, args); err != nil {
-		return hc.Fail(ctx, &error_support.Error{Code: 5000, Msg: "数据解析失败"})
+		return hc.Fail(ctx, &error_support.Error{Code: ParamsFormatFailCode, Msg: "数据解析失败"})
 	}
 
 	content, _ := jsoniter.MarshalToString(args)
@@ -78,7 +78,7 @@ func SRpcCall(ctx *routing.Context, serverName, funcName string, args interface{
 	err := rpcClient.ClientPool.Client().Call(c, serverName, funcName, args, reply)
 	if err != nil {
 		logger.Error("ServerName: ", serverName, ", FuncName: ", funcName, ", Err: ", err)
-		return hc.Fail(ctx, &error_support.Error{Code: 5001, Msg: "服务器异常"})
+		return hc.Fail(ctx, &error_support.Error{Code: SystemFailCode, Msg: "服务器异常"})
 	}
 
 	rt := reflect.TypeOf(reply)

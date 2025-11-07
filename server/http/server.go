@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+
 	routing "github.com/gly-hub/fasthttp-routing"
 	"github.com/team-dandelion/go-dandelion/server/http/middleware"
 	"github.com/valyala/fasthttp"
@@ -15,6 +16,7 @@ type HttpServer struct {
 func New(port int32) *HttpServer {
 	router := routing.New()
 	router.Use(middleware.MiddlewareSentinel(), middleware.MiddlewareRequestLink(), middleware.MiddlewareCustomError())
+	fmt.Println("http server init")
 	return &HttpServer{
 		router: router,
 		port:   port,
